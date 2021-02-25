@@ -1,0 +1,116 @@
+<section class="filter-bar">
+  <div class="card text-white">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-4 border-right col-sm-12 select-form-field">
+          <select
+            class="form-control"
+            #mySelect
+            (change)="getFormId(mySelect.value)"
+            [(ngModel)]="selectedFormId"
+          >
+            <option value="0">Select Form</option>
+            <option *ngFor="let form of FormList" [value]="form.formId">
+              {{ form.formName }}
+            </option>
+          </select>
+
+          <!-- <mat-form-field appearance="fill">
+                          <mat-label>Select Form</mat-label>
+                          <mat-select [(ngModel)]="selectedFormId" #mySelect (change)="getFormId(mySelect.value)">
+                            <mat-option *ngFor="let form of FormList" [value]="form.formId">
+                                {{form.formName}}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field> -->
+        </div>
+
+        <div class="col-md border-right col-sm-6 select-business-field">
+          <select
+            class="form-control"
+            #bunit
+            (change)="getBusinessUnitId(bunit.value)"
+            [(ngModel)]="selectedBuId"
+          >
+            <option value="0">Select Business Unit</option>
+            <option
+              *ngFor="let bu of BusinessFormList"
+              [value]="bu.businessUnitId"
+            >
+              {{ bu.businessUnitTitle }}
+            </option>
+          </select>
+        </div>
+        <div class="col-2 text-center border-right">
+          <select
+            class="form-control"
+            #yearValue
+            (change)="getYearValueById(yearValue.value)"
+            [(ngModel)]="selectedYearValueId"
+          >
+            <option value="0">Select Year</option>
+            <option *ngFor="let item of enumYearsList" [value]="item">
+              {{ item }}
+            </option>
+          </select>
+        </div>
+        <div class="col-md border-right col-sm-6 select-month-field">
+          <select
+            class="form-control"
+            #monthValue
+            (change)="getMonthValueById(monthValue.value)"
+            [(ngModel)]="selectedMonthValueId"
+          >
+            <option value="0">Select Month</option>
+            <option *ngFor="let item of enumMonthsList" [value]="item">
+              {{ MonthValueList[item] }}
+            </option>
+          </select>
+        </div>
+        <!-- start coding -By Meska- -->
+        <div class="col-md col-sm-6 select-week-field">
+          <ng-select
+            [multiple]="true"
+            [(ngModel)]="selectedWeekValueId"
+            [closeOnSelect]="false"
+            #weekValue
+            [items]="enumWeeksList"
+            (close)="getWeekValueById(selectedWeekValueId)"
+          >
+            <ng-template ng-option-tmp let-item="item" let-item$="item$">
+              <input
+                [ngModelOptions]="{ standalone: true }"
+                [(ngModel)]="item$.selected"
+                id="item-{{ item.value }}"
+                [value]="item"
+                type="checkbox"
+              />
+              <a class="mx-2">{{ WeekValueList[item] }}</a>
+            </ng-template>
+          </ng-select>
+        </div>
+        <!-- <div class="col-md col-sm-6 select-week-field">
+                        <select class="form-control" #weekValue (change)="getWeekValueById(weekValue.value)"
+                            [(ngModel)]="selectedWeekValueId">
+                            <option *ngFor="let item of enumWeeksList" [value]="item">
+                                {{WeekValueList[item]}}
+                            </option>
+                        </select>
+                    </div> -->
+        <!-- end coding -By Meska- -->
+        <!-- <div class="col-4">
+                        <div class="btn-styles">
+                            <div class=" d-md-inline-block text-right mr-3">
+
+                                <button type="button" class="btn btn-light btn-block ">Save</button></div>
+                            <div class="d-md-inline-block text-right">
+
+                                <button type="button" class="btn btn-secondary btn-block">
+                                    Cancel</button>
+                            </div>
+                        </div>
+                    </div> -->
+      </div>
+    </div>
+  </div>
+</section>

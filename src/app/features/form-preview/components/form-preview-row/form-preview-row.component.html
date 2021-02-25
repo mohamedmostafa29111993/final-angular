@@ -1,0 +1,94 @@
+<!-- Kpi -->
+<ng-container *ngIf="structureTypeId == structureType.KPI">
+  <th scope="row" class="align-middle dimension-title">
+    <span ngbTooltip="{{ kpi.title }} ---- {{ kpi.code }}">
+      {{ kpi.title }} {{ kpi.code }}
+    </span>
+  </th>
+</ng-container>
+<!-- /Kpi -->
+<!-- dimension data-->
+<ng-container *ngIf="structureTypeId == structureType.DimensionData">
+  <th class="second-section">
+    {{ dimensionData.title }}
+    <div class="dropdown">
+      <a class="dropbtn"><i class="fa fa-plus"></i></a>
+      <div class="dropdown-container">
+        <div ngbDropdown class="d-inline-block">
+          <button
+            class="btn dropdown-outline-ellipsis-icon"
+            id="dimensionWeek1"
+            ngbDropdownToggle
+          >
+            <i class="fas fa-info"></i>
+          </button>
+          <div ngbDropdownMenu aria-labelledby="dimensionWeek1">
+            <button ngbDropdownItem class="task-font">
+              <i class="fas fa-tasks"></i> Task :
+              {{ dimensionData.activityCountDto?.taskCount }}
+            </button>
+            <button ngbDropdownItem class="Issue-font">
+              <i class="fas fa-bug"></i>Issue :
+              {{ dimensionData.activityCountDto?.issueCount }}
+            </button>
+            <button ngbDropdownItem class="Meeting-font">
+              <i class="fas fa-handshake"></i> Meeting :
+              {{ dimensionData.activityCountDto?.meetingCount }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </th>
+</ng-container>
+<!-- /dimension -->
+<!-- dimension week -->
+<ng-container *ngIf="structureTypeId == structureType.DimensionWeek">
+  <th class="second-section">
+    <div class="d-flex justify-content-between">
+      <span class="week-title"
+        >{{ dimensionWeek.title }} {{ dimensionWeek.week }}</span
+      >
+    </div>
+  </th>
+</ng-container>
+<!-- /dimension week -->
+<ng-container
+  *ngIf="
+    structureTypeId == structureType.DimensionWeek ||
+    (structureTypeId == structureType.KPI && kpi.showValues) ||
+    (structureTypeId == structureType.DimensionData && dimensionData.showValues)
+  "
+>
+  <ng-container *ngFor="let cell of cells; let i = index">
+    <td
+      class="second-section"
+      [ngClass]="{ 'yellow-input': cell.typeId == cellType.UserInput }"
+    >
+      <div class="d-flex justify-content-between cell-dropdown-input">
+        <div ngbTooltip="{{ cell.columnBindSource }}">
+          <span class="cell-val">
+            <ng-container
+              *ngIf="cell.typeId == cellType.UserInput; then write; else read"
+            >
+            </ng-container>
+          </span>
+          <ng-template #read>
+            {{ cell.value | number: "1.0-0" }}
+          </ng-template>
+          <ng-template #write>
+            <input
+              type="number"
+              [(ngModel)]="cell.value"
+              class="form-control dashed yellow-cell"
+              (click)="inputClick(i)"
+              (blur)="inputChange(i)"
+            />
+          </ng-template>
+          <ng-container *ngIf="cell.columnIsPercentage"> %</ng-container>
+          <!-- <span class="TooltipSpan">{{cell.columnBindSource}}</span> -->
+        </div>
+      </div>
+    </td>
+  </ng-container>
+</ng-container>

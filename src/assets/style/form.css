@@ -1,0 +1,34 @@
+.card-body {
+    padding: 0.75rem;
+}
+
+.btn-padding{
+
+    padding-top: 10px;
+}
+.form-title{
+
+  background-color: rgba(4, 103, 161, 1) !important;
+}
+
+.w-23 {
+    width: 23%!important;
+}
+.w-14 {
+    width: 14%!important;
+}
+.w-30{
+    width:30% !important;
+}
+
+
+.dashed{
+    border-style: double;
+    border-color: black;
+    height: calc(1.6rem + 1px);
+}
+
+th, td {
+    padding: 6px 8px 6px 8px !important;
+}
+

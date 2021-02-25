@@ -1,0 +1,220 @@
+<div class="modal-popup" id="modal-popup" [busy]="isloaded">
+  <form
+    [formGroup]="copyKpisForm"
+    class="form-horizontal"
+    autocomplete="off"
+    (ngSubmit)="save()"
+  >
+    <abp-modal-header
+      [title]="title | localize"
+      (onCloseClick)="ModalRef.hide()"
+    ></abp-modal-header>
+
+    <div class="modal-body">
+      <div class="alert alert-warning" role="alert">
+        <i class="fa fa-info-circle mr-3"></i>
+        <p>
+          <strong>note that!</strong> data that will apear is the same structure
+          as currnet form structure
+        </p>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="item">
+            <div class="title">
+              <h6>{{ "Forms" | localize }}</h6>
+            </div>
+            <div class="body">
+              <ngx-skeleton-loader
+                *ngIf="!isFormsLoaded && !FormStructure"
+                [theme]="{
+                  height: '40px',
+                  border: '1px solid rgb(211 206 206)',
+                  'background-color': 'rgb(238 235 235)'
+                }"
+                count="1"
+                animation="progress"
+              ></ngx-skeleton-loader>
+              <div [class.d-none]="!isFormsLoaded && !FormStructure">
+                <ng-select
+                  placeholder="select ..."
+                  formControlName="forms"
+                  [items]="forms"
+                  [multiple]="true"
+                  bindLabel="formName"
+                  [closeOnSelect]="false"
+                  bindValue="formId"
+                >
+                  <ng-template
+                    ng-option-tmp
+                    let-item="item"
+                    let-item$="item$"
+                    let-index="index"
+                  >
+                    <input
+                      id="item-{{ index }}"
+                      [ngModelOptions]="{ standalone: true }"
+                      [(ngModel)]="item$.selected"
+                      type="checkbox"
+                    />
+                    <a
+                      class="ml-3"
+                      [class.ng-option-selected]="item.formId == targetFormId"
+                      >{{ item.formName }}</a
+                    >
+                  </ng-template>
+                </ng-select>
+                <span
+                  class="form-text text-danger"
+                  *ngIf="formSubmitted && copyKpisForm.get('forms').invalid"
+                >
+                  please select form
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4" *ngIf="showSubSection">
+          <div class="item">
+            <div class="title">
+              <h6>{{ "SubSections" | localize }}</h6>
+            </div>
+            <div class="body">
+              <ngx-skeleton-loader
+                [theme]="{
+                  height: '40px',
+                  border: '1px solid rgb(211 206 206)',
+                  'background-color': 'rgb(238 235 235)'
+                }"
+                *ngIf="!isSubSectionsLoaded"
+                count="1"
+                animation="progress"
+              ></ngx-skeleton-loader>
+              <div [class.d-none]="!isSubSectionsLoaded">
+                <ng-select
+                  placeholder="select ..."
+                  formControlName="SubSections"
+                  [items]="subSections"
+                  bindLabel="subSectionTitle"
+                  [closeOnSelect]="false"
+                  bindValue="subSectionId"
+                >
+                  <ng-template
+                    ng-option-tmp
+                    let-item="item"
+                    let-item$="item$"
+                    let-index="index"
+                  >
+                    {{ item.subSectionTitle }}
+                  </ng-template>
+                  <ng-option
+                    *ngFor="let item of subSections"
+                    [value]="item.subSectionId"
+                  >
+                    {{ item.subSectionTitle }}
+                  </ng-option>
+                </ng-select>
+
+                <span
+                  class="form-text text-danger"
+                  *ngIf="
+                    formSubmitted && copyKpisForm.get('SubSections').invalid
+                  "
+                >
+                  please select subsection
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4" *ngIf="showKPIS">
+          <div class="item">
+            <div class="title">
+              <h6>{{ "KPIS" | localize }}</h6>
+            </div>
+            <div class="body">
+              <ngx-skeleton-loader
+                [theme]="{
+                  height: '40px',
+                  border: '1px solid rgb(211 206 206)',
+                  'background-color': 'rgb(238 235 235)'
+                }"
+                *ngIf="!isKPISLoaded"
+                count="1"
+                animation="progress"
+              >
+              </ngx-skeleton-loader>
+              <div [class.d-none]="!isKPISLoaded">
+                <ng-select
+                  [compareWith]="compareFn"
+                  placeholder="select ..."
+                  formControlName="KPIS"
+                  [items]="KPIS"
+                  [multiple]="true"
+                  bindLabel="kpiTitle"
+                  [closeOnSelect]="false"
+                  bindValue="kpiId"
+                >
+                  <ng-template
+                    ng-option-tmp
+                    let-item="item"
+                    let-item$="item$"
+                    let-index="index"
+                  >
+                    <input
+                      [ngModelOptions]="{ standalone: true }"
+                      [(ngModel)]="item$.selected"
+                      id="item-{{ item.kpiId }}"
+                      type="checkbox"
+                    />
+                    <a class="mx-2">{{ item.kpiTitle }}</a>
+                  </ng-template>
+                </ng-select>
+                <span
+                  class="form-text text-danger"
+                  *ngIf="formSubmitted && copyKpisForm.get('KPIS').invalid"
+                >
+                  please select KPI
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="fromStructureReference.length">
+        <div class="row forms-box" *ngFor="let item of fromStructureReference">
+          <div class="col-md-4" *ngIf="getFormTitle(item.formId)">
+            <div class="item">
+              <div class="body body-show">
+                <span>
+                  <i class="fa fa-circle"></i> {{ getFormTitle(item.formId) }}
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4" *ngIf="item?.subSection?.subSectionTitle">
+            <div class="item">
+              <div class="body body-show">
+                <span>
+                  <i class="fa fa-circle"></i>
+                  {{ item.subSection.subSectionTitle }}
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4" *ngIf="item?.subSection?.kpIs">
+            <div class="item">
+              <div class="body body-show">
+                <span *ngFor="let kpi of item.subSection.kpIs">
+                  <i class="fa fa-circle"></i> {{ kpi.kpiTitle }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <abp-modal-footer (onCancelClick)="ModalRef.hide()"></abp-modal-footer>
+  </form>
+</div>

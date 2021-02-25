@@ -1,0 +1,205 @@
+
+.yellow-cell,
+.yellow-input {
+  background-color: #ffffa0;
+}
+
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+::placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: lightseagreen;
+  font-weight: bold;
+  opacity: 1; /* Firefox */
+}
+
+:-ms-input-placeholder {
+  /* Internet Explorer 10-11 */
+  color: lightseagreen;
+  font-weight: bold;
+}
+
+::-ms-input-placeholder {
+  /* Microsoft Edge */
+  color: lightseagreen;
+  font-weight: bold;
+}
+
+
+
+
+.yellow-cell,
+.yellow-input {
+  background-color: #fff6e6;
+}
+
+.yellow-cell {
+  border-color: rgb(76 76 76 / 34%) !important;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+::placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: lightseagreen;
+  font-weight: bold;
+  opacity: 1; /* Firefox */
+}
+
+:-ms-input-placeholder {
+  /* Internet Explorer 10-11 */
+  color: lightseagreen;
+  font-weight: bold;
+}
+
+::-ms-input-placeholder {
+  /* Microsoft Edge */
+  color: lightseagreen;
+  font-weight: bold;
+}
+
+.CellWithTooltip {
+  position: relative;
+}
+
+.TooltipSpan {
+  display: none;
+  position: absolute;
+  z-index: 100;
+  border: 1px;
+  background-color: darkblue;
+  border-style: solid;
+  border-width: 1px;
+  border-color: darkblue;
+  border-radius: 6px;
+  padding: 3px;
+  color: wheat;
+  top: 30px;
+  left: 20px;
+}
+
+.CellWithTooltip:hover span.TooltipSpan {
+  display: block;
+}
+.WeekCellWithTooltip {
+  position: relative;
+}
+
+.WeekTooltipSpan {
+  display: none;
+  position: absolute;
+  z-index: 100;
+  border-color: black;
+  top: 30px;
+  left: 20px;
+}
+
+/* new */
+.dropdown-toggle::after {
+  content: none;
+}
+.dimension-title {
+  background-color: #03a9f44f;
+}
+
+.dimension-title span {
+  color: #03a9f4;
+}
+
+.dropdown {
+  margin-right: 5px;
+}
+.dropdown:last-child {
+  margin-right: 0px;
+}
+.dropdown-toggle.dropdown-outline-ellipsis-icon {
+  padding: 4px 6px;
+  /* line-height: normal; */
+  border-radius: 50%;
+  /* border: 1px solid #03a9f4; */
+  /* color: #03a9f4; */
+  width: 22px;
+  height: 22px;
+  font-size: 9px;
+  /* cursor: pointer; */
+}
+.dropdown-container {
+  opacity: 0;
+  transition: all 0.2s ease-in;
+}
+
+th:hover .dropdown-container,
+td:hover .dropdown-container {
+  opacity: 1;
+}
+
+.cell-val {
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 0.3s ease-in-out;
+}
+
+td:hover .cell-val {
+  color: #03a9f4;
+  transform: scale(1.2);
+  padding: 0 2px;
+}
+td:hover .cell-val input {
+  transform: scale(1);
+}
+.yellow-input .cell-dropdown-input {
+  position: relative;
+  border: 1px solid #ccc;
+  border-radius: 7px;
+  padding: 2px;
+}
+
+.yellow-input .cell-dropdown-input input[type="number"] {
+  max-width: 98px;
+  border: 0;
+  padding: 4px 7px;
+  line-height: normal;
+  background-color: transparent;
+}
+
+.yellow-input .cell-dropdown-input .dropdown-container {
+  display: flex;
+  position: absolute;
+  top: 2.3px;
+  right: 1.5px;
+}
+
+
+.dropdown-item.task-font,
+.dropdown-item.Issue-font,
+.dropdown-item.Meeting-font {
+  color:#03a9f48f;
+}
+
+.second-section{
+  border: 1px solid #a9abad1c;
+}
+
+.second-section .week-title {
+  font-size: 20px;
+  color: #0467a1;
+}

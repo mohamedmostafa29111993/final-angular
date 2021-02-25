@@ -1,0 +1,88 @@
+<section class="content-header sub-header">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-6">
+          <h1 class="page-title">{{ " "}}</h1>
+        </div>
+      </div>
+    </div>
+  </section>
+<section class="content px-2">
+    <div class="container-fluid cf-margin">
+
+        <div *ngIf="!isLoading && subsection">
+            <div class="tables-section">
+                <div class="section-wrapper">
+                    <ng-container>
+                        <div class="table-content">
+                            <table>
+                                <thead>
+                                    <tr *ngIf="subsection.columns?.length > 0">
+                                        <th scope="col" class="text-light form-title"> {{subsection.title}} </th>
+                                        <ng-container>
+                                            <th *ngFor="let column of subsection.columns" scope="col"
+                                                class="cell-titles"
+                                                [ngClass]="{'actual-header': column.bindSource?.toLowerCase() === 'actual', 'actual-growth': column.bindSource?.toLowerCase() === 'actual_growth_bp', 'actual-growth-achievement': column.bindSource?.toLowerCase() === 'bp_growth_achievement'}">
+                                                <div>
+                                                    {{column.header}}
+                                                </div>
+                                            </th>
+                                        </ng-container>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <ng-container *ngFor="let kpi of subsection.kpis">
+
+                                        <tr app-form-preview-row [structureTypeId]="structureType.KPI" [kpi]="kpi"
+                                            [columns]="subsection.columns" class="measure">
+                                        </tr>
+
+                                        <!--weeks on kpi level-->
+                                        <ng-container *ngIf="kpi.dimensionWeeks?.length>0">
+                                            <ng-container *ngFor="let week of kpi.dimensionWeeks">
+                                                <tr app-form-preview-row    
+                                                    [formId]="formId"
+                                                    [structureTypeId]="structureType.DimensionWeek"
+                                                    [dimensionWeek]="week" 
+                                                    [columns]="subsection.columns"
+                                                    class="dimension">
+                                                </tr>
+                                            </ng-container>
+                                        </ng-container>
+                                        <!-------------------->
+                                        <ng-container *ngIf="kpi.dimensions?.length>0">
+                                            <ng-container *ngFor="let dimension of kpi.dimensions">
+                                                <tr app-form-preview-row 
+                                                    [formId]="formId"
+                                                    [structureTypeId]="structureType.DimensionData"
+                                                    [dimensionData]="dimension"
+                                                    [columns]="subsection.columns" 
+                                                    class="dimension">
+                                                </tr>
+
+                                                <ng-container *ngFor="let week of dimension.dimensionWeeks">
+                                                    <tr app-form-preview-row 
+                                                        [formId]="formId"
+                                                        [structureTypeId]="structureType.DimensionWeek"
+                                                        [dimensionWeek]="week" 
+                                                        [columns]="subsection.columns"
+                                                        class="dimension">
+                                                    </tr>
+                                                </ng-container>
+
+                                            </ng-container>
+                                        </ng-container>
+
+                                    </ng-container>
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>

@@ -1,0 +1,33 @@
+.pivotTableBuilder .pivotTable {
+    overflow: auto;
+    min-height: 250px;
+    max-height: 500px; /* lets limit holder height to illustrate fixed headers */
+}
+.modal-dialog.modal-lg
+{
+    max-width: 100%;
+    border: 5px solid red !important;
+}
+.tab-container{
+    padding: 10px;
+      border: 1px solid #CCC;
+      border-radius: 10px;
+      display: block;
+  }
+
+.nav-tabs li{
+    max-width: 50%;
+}
+#renderPivotTable
+{
+    background-color: #0cb5cb;
+    color: #fff;
+    border: 1px solid #0cb5cb;
+    font-size: 0.9rem;
+    height: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    margin-top: 10px;
+}

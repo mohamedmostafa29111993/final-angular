@@ -1,0 +1,365 @@
+<div class="form-view-modal">
+
+    <form class="form-horizontal" autocomplete="off" #createTaskModal="ngForm" (ngSubmit)="savetask()">
+        <abp-modal-header [title]="activityTypeFlag==1 ? 'Task' : 'Issue '" (onCloseClick)="modalRef.hide()">
+        </abp-modal-header>
+        <div class="errmsg">{{errMsg}}</div>
+        <!-- 'Issue ' | localize -->
+        <div class="modal-body">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="card md-white-bg col p-0">
+
+                        <!-- <div class="card-header">
+                        <div class="CardHeaderCont">
+                            <h3 class="card-title row mt-3">
+                                <label class=""> Activity Details </label>
+                                <div class="errmsg">{{errMsg}}</div>
+                            </h3>
+                        </div>
+                    </div> -->
+
+                        <div class="card-body p-0">
+
+                            <h5 *ngIf="activityTypeFlag==2"> Issue Details </h5>
+
+                            <h5 *ngIf="activityTypeFlag==1"> Task Details </h5>
+
+                            <div class="row">
+
+                                <div class="col-lg-6 ">
+                                    <div class="custom-bg-col">
+
+                                        <div class="form-group" *ngIf="activityTypeFlag==1">
+
+                                            <label class="text">Task Title
+                                                <span class="text-danger"> *</span>
+                                            </label>
+
+                                            <input type="text"
+                                                [(ngModel)]="this.createOrUpdateActivityFormDto.activityForm.activityTitel"
+                                                id="activityTitel" maxlength="100" class="form-control" required
+                                                #activityTitleModel="ngModel" #activityTitleEl name="activityTitel"
+                                                placeholder="Enter Task Title" tabindex="101">
+
+                                            <abp-validation-summary [control]="activityTitleModel"
+                                                [controlEl]="activityTitleEl"></abp-validation-summary>
+
+                                        </div>
+
+
+                                        <div class="form-group" *ngIf="activityTypeFlag==2">
+                                            <label class="text">Issue Title
+                                                <span class="text-danger"> *</span>
+                                            </label>
+                                            <input type="text"
+                                                [(ngModel)]="this.createOrUpdateActivityFormDto.activityForm.activityTitel"
+                                                id="activityTitel" maxlength="100" class="form-control" required
+                                                #activityTitleModel="ngModel" #activityTitleEl name="activityTitel"
+                                                placeholder="Enter Issue Title" tabindex="101">
+                                            <abp-validation-summary [control]="activityTitleModel"
+                                                [controlEl]="activityTitleEl"></abp-validation-summary>
+                                        </div>
+
+
+                                        <div class="form-group">
+                                            <label for="PriorityId" class="text-bold">Priority
+                                                <span class="text-danger"> *</span>
+                                            </label>
+                                            <div class="dropdown" dropdown>
+                                                <select class="form-control" #per required name="Priority"
+                                                    (change)="bindStructureper(per.value)">
+                                                    <option [value]="2"> High</option>
+                                                    <option [value]="3"> medium</option>
+                                                    <option [value]="4"> low</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="form-group">
+                                            <label for="StartDate" class="text-bold">Start Date
+                                                <span class="text-danger">
+                                                    *</span>
+                                            </label>
+                                            <!-- value="{{this.createOrUpdateActivityFormDto.activityForm.startDate | date:'mm/dd/yyyy'}}" -->
+                                            <input class="form-control"
+                                                [(ngModel)]="this.createOrUpdateActivityFormDto.activityForm.startDate"
+                                                type="date" name="startDate" required #startDateModel="ngModel"
+                                                #startDateEl id="example-startDate-input"
+                                                (change)="DateValidation()">
+
+                                            <abp-validation-summary [control]="startDateModel"
+                                                [controlEl]="startDateEl">
+                                            </abp-validation-summary>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="DueDate" class="text-bold">Due Date
+                                                <span class="text-danger">
+                                                    *</span>
+                                            </label>
+
+                                            <input class="form-control"
+                                                [(ngModel)]="this.createOrUpdateActivityFormDto.activityForm.dueDate"
+                                                name="dueDate" type="date" required #dueDateModel="ngModel" #dueDateEl
+                                                id="example-dueDate-input"
+                                                (change)="DateValidation()">
+
+                                            <abp-validation-summary [control]="dueDateModel" [controlEl]="dueDateEl">
+                                            </abp-validation-summary>
+                                            <span class="text-danger" *ngIf="DueDateError"> can't be before
+                                                Start Date </span>
+
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="reminder" class="text-bold">Reminder Date
+                                                <span class="text-danger">
+                                                    *</span>
+                                            </label>
+
+                                            <input class="form-control"
+                                                [(ngModel)]="this.createOrUpdateActivityFormDto.activityForm.reminderDate"
+                                                name="reminderDate" type="date" required #reminderDateModel="ngModel"
+                                                #reminderDateEl id="example-reminderDate-input"
+                                                (change)="DateValidation()">
+                                            <abp-validation-summary [control]="reminderDateModel"
+                                                [controlEl]="reminderDateEl"></abp-validation-summary>
+                                                <span class="text-danger" *ngIf="ReminderDateError"> can't be before Start Date</span>
+                                                <span class="text-danger" *ngIf="ReminderDueDateError"> can't be After dueDate </span>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 ">
+                                    <div class="custom-bg-col">
+
+                                        <div class="form-group">
+
+                                            <label for="assignee" class="text-bold ">Assignee
+                                                <span class="text-danger"> *</span>
+                                            </label>
+                                            <ng-select [(ngModel)]="selectedAssigneesArray" [multiple]="true"
+                                                name="assignee" (blur)="checkValue2()"
+                                                (keyup)="getFilteredActivityAssignees($event.target.value)" required>
+                                                <ng-option *ngFor="let user of filteredActivityAssignees"
+                                                    [value]="user.id">
+                                                    {{user.userName}}</ng-option>
+                                            </ng-select>
+
+                                            <span
+                                                class="error invalid-feedback d-block span-sty">{{orgnizererrmsg}}</span>
+
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="followUp" class="text-bold ">FollowUp
+                                                <span class="text-danger"> *</span>
+                                            </label>
+                                            <ng-select [multiple]="true" [(ngModel)]="selectedFollowersArray"
+                                                name="followUp"
+                                                (keyup)="getFilteredActivityFollowers($event.target.value)"
+                                                (blur)="checkfollowupValue()" required>
+                                                <ng-option *ngFor="let user of filteredActivityFollowers"
+                                                    [value]="user.id">
+                                                    {{user.userName}}</ng-option>
+                                            </ng-select>
+
+                                            <span
+                                                class="error invalid-feedback d-block span-sty">{{followupErrMsg}}</span>
+
+                                        </div>
+
+                                        <div class="form-group">
+
+                                            <label for="followUp" class="text-bold">Business Units
+                                                <span class="text-danger"> *</span>
+                                            </label>
+                                            <div class="dropdown" dropdown>
+                                                <select class="form-control" #bunit (blur)="BUvalidation(bunit.value)"
+                                                    name="BU" (change)="BUvalidation(bunit.value)" required>
+                                                    <option disabled selected value="0">Select Business Unit
+                                                    </option>
+                                                    <option *ngFor="let bu of BusinessUnitList" [value]="bu.id">
+                                                        {{bu.value}}
+                                                    </option>
+                                                </select>
+                                                <span
+                                                    class="error invalid-feedback d-block">{{BusinessUnitErrorMsg}}</span>
+                                            </div>
+
+                                        </div>
+
+
+                                        <div class="form-group">
+                                            <label for="Description" class="text-bold">Description
+                                                <span class="text-danger">
+                                                    *</span>
+                                            </label>
+                                            <textarea class="form-control" name="Description" required
+                                                #DescriptionModel="ngModel" #DescriptionEl
+                                                [(ngModel)]="this.createOrUpdateActivityFormDto.activityForm.activityDescription"
+                                                id="Description" rows="3"></textarea>
+                                            <abp-validation-summary [control]="DescriptionModel"
+                                                [controlEl]="DescriptionEl">
+                                            </abp-validation-summary>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="related-tasks">
+                            <div *ngIf="activityTypeFlag==2">
+                                <h5 class="modal-section-title">
+                                    Related Tasks
+
+                                </h5>
+                            </div>
+
+
+                                <div class="card-body p-0" *ngIf="activityTypeFlag==2">
+                                    <div class="custom-bg-col">
+
+                                    <div *ngIf="activityTypeFlag==2">
+
+                                        <div class="row align-items-end">
+
+                                            <div class="col-lg-3">
+                                                <div class="form-group">
+
+                                                    <label class="text">Task Title
+                                                    </label>
+                                                    <input type="text" id="TaskTitel" maxlength="100"
+                                                        class="form-control" name="TaskTitel"
+                                                        [(ngModel)]="this.SubTaskData.subActivityTitel"
+                                                        placeholder="Enter Task Title" tabindex="101">
+
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-3">
+                                                <div class="form-group">
+
+                                                    <label for="DueDate" class="text-bold">Due Date
+                                                    </label>
+                                                    <input class="form-control"
+                                                        [(ngModel)]="this.SubTaskData.subActivityDueDate"
+                                                        name="TaskdueDate" type="date" id="example-dueDate-input"
+                                                        onkeydown="return false">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-3">
+                                                <div class="form-group">
+
+                                                    <label for="TaskAssignee" class="text-bold ">Assignees
+
+                                                    </label>
+                                                    <ng-select [(ngModel)]="selectedSubTaskAssigneesArray"
+                                                        [multiple]="true" name="TaskAssignee"
+                                                        (blur)="getFilteredSubTaskAssignees($event.target.value)"
+                                                        (keyup)=" getFilteredSubTaskAssignees($event.target.value)">
+                                                        <ng-option *ngFor="let user of filteredSubTaskAssignees"
+                                                            [value]="user">
+                                                            {{user.userName}}</ng-option>
+                                                    </ng-select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-3">
+
+                                                <button type="button" class="btn btn-submit mx-1 px-2"
+                                                    *ngIf="subTaskIndex == -1" [attr.disabled]="((this.SubTaskData.subActivityTitel == null || this.SubTaskData.subActivityTitel == '')
+                                        || (this.SubTaskData.subActivityDueDate == null)
+                                        || (this.selectedSubTaskAssigneesArray.length == 0)) ? true : null"
+                                                    (click)="addSubTask()">ADD</button>
+                                                <!-- *ngIf="subTaskIndex >= 0" -->
+                                                <button type="button" class="btn btn-submit mx-1 px-2" *ngIf="subTaskIndex >= 0" [attr.disabled]="((this.SubTaskData.subActivityTitel == null || this.SubTaskData.subActivityTitel == '')
+                                        || (this.SubTaskData.subActivityDueDate == null)
+                                        || (this.selectedSubTaskAssigneesArray.length == 0)) ? true : null"
+                                                    (click)="addSubTask()">Update</button>
+                                                <!-- <button type="button" class="btn btn-clear "  (click)="ClearSubTask()">CLEAR</button> -->
+                                                <!-- <button type="button" form="quickTaskForm" type="submit" class="btn btn-primary btn-theme-primary" id="button-subtask-save">SAVE</button>
+                                        <button type="button" form="quickTaskForm" type="button"  class="btn btn-secondary" id="button-subtask-clear">CLEAR</button> -->
+
+                                            </div>
+
+                                        </div>
+
+
+                                        <div class=" table-responsive p-0">
+
+                                            <table class="table table-hover text-nowrap">
+                                                <thead class="bg-light">
+                                                    <!-- table appear on condition -->
+                                                    <!-- <tr  *ngIf="subActivityFormList.length > 0"> -->
+                                                    <!-- -->
+                                                    <tr *ngIf="subActivityFormList.length > 0">
+                                                        <th class="title-sty">{{ "Task Title" | localize }}</th>
+                                                        <th class="dueDate-sty">{{ "Due Date" | localize }}</th>
+                                                        <th class="Assignee-sty"> {{ "Assignees" | localize }}</th>
+                                                        <th> {{ "Actions" | localize }}</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let subtask of this.subActivityFormList; let i = index">
+                                                        <td class="subTaskTitle-sty">
+                                                            {{ subtask.subActivityTitel }}
+                                                        </td>
+                                                        <td class="dd-sty">
+                                                            {{ subtask.subActivityDueDate }}
+                                                        </td>
+                                                        <td class="assign-sty">
+                                                    <tr *ngFor="let assignee of subtask.subActivityAssignees">
+                                                        {{ assignee.userName }}
+                                                    </tr>
+                                                    </td>
+                                                    <td class="btn-des">
+                                                        <button type="button" class="btn btn-sm bg-secondary"
+                                                            (click)="editSubActivity(subtask,i)">
+                                                            <i class="fas fa-pencil-alt"></i>
+
+                                                        </button>
+                                                        <button type="button" class="btn btn-sm bg-danger mx-2"
+                                                            [attr.disabled]="subTaskIndex >= 0  ? true : null"
+                                                            (click)="deleteSubActivities(i)">
+                                                            <i class="fas fa-trash"></i>
+
+                                                        </button>
+
+
+                                                    </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <abp-modal-footer [cancelDisabled]="saving" [saveDisabled]="!createTaskModal.form.valid || saving ||
+         createOrUpdateActivityFormDto.activityForm.businessUnitId == 0 || DueDateError || ReminderDateError" (onCancelClick)="modalRef.hide()">
+        </abp-modal-footer>
+
+    </form>
+</div>

@@ -1,0 +1,20 @@
+<div class="modal-popup" id="modal-popup">
+    <form class="form-horizontal" autocomplete="off" #addSectionForm="ngForm"  (ngSubmit)="addSection()">
+
+      <abp-modal-header [title]="'Add Section' | localize" (onCloseClick)="ModalRef.hide()"></abp-modal-header>
+
+      <div class="modal-body">
+
+        <ng-select  [(ngModel)]="selectedSections" [multiple]="true" name="Section"  placeholder="Select sections">
+
+          <ng-option   *ngFor="let section of this.FormMainSections" [value]="section">{{section.sectionTitle}}
+          </ng-option>
+        </ng-select>
+        <div *ngIf="(this.errorMsg)" class="text-danger">Please select at least one section </div>
+      </div>
+
+      <abp-modal-footer (onCancelClick)="ModalRef.hide()"></abp-modal-footer>
+    </form>
+  </div>
+
+

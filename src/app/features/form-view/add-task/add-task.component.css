@@ -1,0 +1,119 @@
+/* .modal-content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 120% !important;
+    pointer-events: auto;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid rgba(0,0,0,.2);
+    border-radius: .3rem;
+    box-shadow: 0 0.25rem 0.5rem rgba(0,0,0,.5);
+    outline: 0;
+}
+.page-header.post-toolbar {
+    background-color: #0cb5cb;
+    width: 100%;
+    padding: 15px 25px!important;
+}
+.note
+{
+    text-align: center;
+    height: 80px;
+    background: -webkit-linear-gradient(left, #0072ff, #8811c5);
+    color: #fff;
+    font-weight: bold;
+    line-height: 80px;
+}
+.form-content
+{
+    padding: 5%;
+    border: 1px solid #ced4da;
+    margin-bottom: 2%;
+}
+
+
+.card{
+    box-shadow: none;
+
+}
+.card .card-header {
+    padding: 0;
+    padding-bottom: 10px;
+    padding-top: 0px;
+    margin-bottom: 15px;
+}
+.modal-header{
+    padding: 0;
+}
+.span-sty{
+    padding-bottom: 15px !important;
+}
+
+.txtsiz{
+    width: 100% !important;
+    height: 36px !important;
+}
+.dropdown-input{
+    position: static !important;
+  overflow: visible !important;
+}
+.errmsg{
+    color: red;
+    font-weight: bold;
+}
+.btn-info {
+    color: #fff;
+    background-color: #17a2b8;
+    border-color: #f8f9fa;
+    box-shadow: none;
+    height: 37px;
+    margin-top: 31px;
+}
+.btn-clear {
+    color: #fff;
+    background-color: #0e10106b;
+    border-color: #f8f9fa;
+    box-shadow: none;
+    height: 40px;
+    margin-top: 27px;
+}
+.dueDate-sty{
+    padding-left: 4.5rem;
+}
+.Assignee-sty{
+    padding-left: 5rem;
+}
+.btn-des{
+    padding-right: 0rem;
+}
+.dd-sty{
+    padding-left: 4.6rem;
+}
+.assign-sty{
+    padding-left: 5rem;
+}
+.subTaskTitle-sty{
+    padding-left: 2rem !important;
+}
+.subActivity-background-dialog{
+    background: #f4f6f9 !important
+} */
+@media (min-width: 1200px) {
+  .related-tasks .form-group {
+    border-bottom: 0px;
+  }
+}
+
+.related-tasks .form-group {
+  min-height: auto;
+}
+.related-tasks h5 {
+  margin-top: 20px;
+}
+.related-tasks .custom-bg-col {
+  height: auto;
+}
+.related-tasks .btn {
+  margin-bottom: 8px;
+}

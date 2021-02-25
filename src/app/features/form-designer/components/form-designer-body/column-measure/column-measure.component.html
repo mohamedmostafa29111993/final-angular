@@ -1,0 +1,36 @@
+<form [formGroup]="highlight">
+    <ng-container
+        *ngIf="columnn.id > 0 && kpi.id > 0">
+        <div *ngIf="pivot?.measures"
+            ngbDropdownMenu
+            aria-labelledby="form-pivot-measure"
+            class="sub-menu-items sub-data">
+            <div
+                class="form-pivot-measure-list">
+                <button
+                    *ngFor=" let measure of pivot.measures"
+                    class="submenu-item px-3 pre-word custom-mat-btn"
+                    ngbDropdownItem
+                    [class.selected-measure]="checkExistingDataSource(columnn.bindSource,kpi.id, measure.name, highlight.get('mappingRadio').value)?.selector ==measure.name  || checkmapping.checked"
+                    >
+
+                    <label
+                        class="form-check-label custom-checkbox custom-mat-btn"
+                        for="{{ measure.name }}"
+                        (click)="selectedDataSource(kpi,columnn,checkmapping.id,  measure.name)"
+                        >
+                        <input type="radio"
+                            formControlName="mappingRadio"
+                            name="mappingRadio"
+                            #checkmapping
+                            [value]="measure.name"
+                            class="form-check-input"
+                            [id]="measure.name" />
+                        <span
+                            class="checkbox-radio-custom-label">{{ measure.name}}</span>
+                    </label>
+                </button>
+            </div>
+        </div>
+    </ng-container>
+</form>

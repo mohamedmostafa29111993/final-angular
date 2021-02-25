@@ -1,0 +1,85 @@
+.card-header {
+    background-color: #0cb5cb;
+    border-radius: 0px;
+    color: white;
+}
+.content-header h1{
+    font-size: 1rem;
+}
+.btn-white{
+    background-color: #FFF;
+    color: #386e7b;
+}
+.btn-cancel{
+    background-color: #386e7b;
+    color: #FFF;
+}
+.btn-white,
+.btn-cancel{
+    max-width: 95px;
+    width: 100%;
+}
+
+.zoom-icon{
+    width: 33px;
+    height: 33px;
+    border: 1px solid #ccd1d2;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: .2rem;
+    margin-left: auto;
+}
+.zoom-icon i{
+    color: #386e7b;
+    font-size: 17px;
+}
+.card-left{
+    background-color: white;
+    height: calc(100vh - 220px);
+    overflow: auto;
+    padding: 10px 0;
+}
+
+.card-body{
+    background-color: white;
+    max-height: max-content;
+    border-radius: 1%;
+}
+.card-right{
+    max-width: 100%;
+}
+
+.btn-light{
+    color: #3a727b!important;
+}
+.card{
+    margin: 1px 14px 1px 14px;
+}
+.sub-title{
+    color: #c1c1c1;
+}
+.sub-header{
+    background-color: #ffffff;
+    margin: 0 0 10px;
+    border-bottom: 1px solid #c1c1c1;
+    padding: .5rem .9rem;
+}
+.sub-header h5{
+    color: #386e7b;
+    display: inline-block;
+    padding-right: 15px;
+    margin-bottom: 0;
+}
+.sub-header span{
+    font-weight: bold;
+    padding-left: 10px;
+    border-left: 1px solid;
+
+}
+
+th[data-key-type="next"]{
+    border: 5px solid red;
+    display: block;
+}

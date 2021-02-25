@@ -1,0 +1,83 @@
+<!-- <img style="display: block;
+margin-left: auto;
+margin-right: auto;
+width: 50%;" src="assets/img/under-construction-tape-png.png"/> -->
+<div>
+  <section class="content-header p-0">
+    <!-- <div class="container-fluid"> -->
+    <div class="card-header">
+      <div class="row align-items-center">
+        <div class="col-6">
+          <h1>{{ "New Form" }}</h1>
+        </div>
+        <div class="col-6 text-right">
+          <a
+            href="javascript:;"
+            class="btn btn-white general-btn"
+            (click)="
+              checkSaveForHighlight(); appFormDesignerSection.getAllSections()
+            "
+          >
+            {{ "Save" }}
+          </a>
+          &nbsp;
+          <a href="javascript:;" class="btn btn-cancel general-btn">
+            {{ "Cancel" }}
+          </a>
+        </div>
+      </div>
+    </div>
+    <!-- </div> -->
+  </section>
+</div>
+<!-- <div class="row">
+    <p>form title</p>
+<span>form code</span>
+</div> -->
+
+<section class="sub-header">
+  <div class="container-fluid">
+    <div class="row align-items-center">
+      <div class="col-sm-6">
+        <h5 class="ng-tns-c112-1">{{ this.formDesignerMetaData.formTitle }}</h5>
+        <span>{{ this.formDesignerMetaData.formCode }}</span>
+      </div>
+      <div class="col-sm-6 text-right">
+        <button
+          class="zoom-icon"
+          [disabled]="isActiveFormPreview"
+          (click)="goToPreviewForm()"
+        >
+          <!-- <i class="fas fa-search-plus fa-lg"></i> -->
+          <i class="fas fa-eye"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="left-sidebar" [busy]="this.global.isAllLoading">
+  <!--  -->
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-3 col-md-4">
+        <div class="card card-left m-0">
+          <!-- (sectionsIsLoaded)="checkAllSectionsIsLoaded($event)" -->
+          <app-form-designer-section
+            #appFormDesignerSection
+            (sendSubSections)="getsubsectionid($event)"
+            [sectionData]="returnSectionData"
+          ></app-form-designer-section
+          ><!-- [sectionData]="returnSectionData" -->
+        </div>
+      </div>
+      <div class="col-lg-9 col-md-8">
+        <app-form-designer-body
+          (onDataPicked)="checkHasData($event)"
+          (dataIsLoaded)="checkDataLoaded($event)"
+        ></app-form-designer-body
+        ><!-- (onDataPicked)="checkHasData($event)" -->
+      </div>
+    </div>
+  </div>
+</section>

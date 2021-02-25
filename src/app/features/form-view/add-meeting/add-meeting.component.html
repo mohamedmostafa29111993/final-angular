@@ -1,0 +1,157 @@
+<div class="form-view-modal">
+<form class="form-horizontal" autocomplete="off" #createTaskModal="ngForm" (ngSubmit)="saveMeeting()">
+    <abp-modal-header [title]="'Meeting Details ' | localize" (onCloseClick)="modalRef.hide()"></abp-modal-header>
+    <div class="errmsg">{{errMsg}}</div>
+    <div class="modal-body form-view-modal">
+        <div class="container-fluid">
+            <div class="card md-white-bg col p-0">
+                <div class="card-body p-0">
+
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="custom-bg-col">
+                                <div class="form-group">
+                                    <label class="text">Meeting Title
+                                        <span class="text-danger"> *</span>
+                                    </label>
+                                    <input type="text" name="meetingTitle"
+                                        [(ngModel)]="this.createOrUpdateActivityFormDto.activityForm.activityTitel"
+                                        required #TitleModel="ngModel" #TitleEl id="ActivityTitle" maxlength="100"
+                                        class="form-control" placeholder="Enter Meeting Title" tabindex="101">
+                                    <abp-validation-summary [control]="TitleModel" [controlEl]="TitleEl">
+                                    </abp-validation-summary>
+                                </div>
+                                <div class="form-group">
+                                    <label for="StartDate">Start Date
+                                        <span class="text-danger"> *</span>
+                                    </label>
+                                    <input class="form-control"
+                                        [(ngModel)]="this.createOrUpdateActivityFormDto.activityForm.startDate"
+                                        name="startDate" required #startDateModel="ngModel" #startDateEl type="date"
+                                        id="example-date-input">
+                                    <abp-validation-summary [control]="startDateModel" [controlEl]="startDateEl">
+                                    </abp-validation-summary>
+                                </div>
+                                <div class="form-group">
+                                    <label for="DueDate">FROM
+                                        <span class="text-danger"> *</span>
+                                    </label>
+                                    <input class="form-control" type="time" value="13:45:00"
+                                        [(ngModel)]="this.createOrUpdateActivityFormDto.activityForm.meetingTimeFrom"
+                                        (change)="TimeValidation()" name="meetingTimeFrom" required
+                                        #timeFromModel="ngModel" #TimeFromEl id="example-timefrom-input">
+                                    <abp-validation-summary [control]="timeFromModel" [controlEl]="TimeFromEl">
+                                    </abp-validation-summary>
+                                    <span class="text-danger" *ngIf="TimeError"> can't be after
+                                        TimeTo </span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="example-time-input">TO
+                                        <span class="text-danger"> *</span>
+                                    </label>
+                                    <input class="form-control" type="time"
+                                        [(ngModel)]="this.createOrUpdateActivityFormDto.activityForm.meetingTimeTo"
+                                        (change)="TimeValidation()" name="meetingtimeTo" required #timeTOModel="ngModel"
+                                        #TimeTOEl value="13:45:00" id="example-timeTo-input">
+                                    <abp-validation-summary [control]="timeTOModel" [controlEl]="TimeTOEl">
+                                    </abp-validation-summary>
+                                    <span class="text-danger" *ngIf="TimeError"> can't be before
+                                        TimeFrom </span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="Location">Location
+                                        <span class="text-danger"> *</span>
+                                    </label>
+                                    <!-- <input type="text" name="location"
+                                        [(ngModel)]="this.createOrUpdateActivityFormDto.activityForm.meetingLocation"
+                                        required #LocationModel="ngModel" #LocationEl id="Location" maxlength="100"
+                                        class="form-control" placeholder="Enter The Location" tabindex="101"> -->
+
+                                        <textarea name="location"
+                                        [(ngModel)]="this.createOrUpdateActivityFormDto.activityForm.meetingLocation"
+                                        required #LocationModel="ngModel" #LocationEl id="Location" maxlength="100"
+                                        class="form-control" placeholder="Enter The Location" tabindex="101" 
+                                        cols="3" rows="3"></textarea>
+
+                                    <abp-validation-summary [control]="LocationModel" [controlEl]="LocationEl">
+                                    </abp-validation-summary>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="custom-bg-col">
+
+                                <div class="form-group">
+                                    <label for="assignee" class="text-bold ">Orgnizer
+                                        <span class="text-danger"> *</span>
+                                    </label>
+                                    <ng-select [(ngModel)]="Organizer" name="orgnizer" id="orgnizer"
+                                        (blur)="checkValue2()" (keyup)="onChangeEvent($event)" required>
+                                        <ng-option *ngFor="let user of Users" [value]="user.id">{{user.userName}}
+                                        </ng-option>
+                                    </ng-select>
+                                    <span class="error invalid-feedback d-block">{{orgnizererrmsg}}</span>
+                                </div>
+                                <div class="form-group">
+
+                                    <label for="RequiredAttendee">Required Attendee(s)
+                                        <span class="text-danger"> *</span>
+                                    </label>
+                                    <ng-select [multiple]="true" [(ngModel)]="MeetingRequiredAttendees"
+                                        name="MeetingRequiredAttendees" id="MeetingRequiredAttendees"
+                                        (blur)="checkValue()" (keyup)="GetMeetingRequiredAttendees($event.target.value)"
+                                        required>
+                                        <ng-option *ngFor="let user of AllRequiredAttendees" [value]="user.id">
+                                            {{user.userName}}</ng-option>
+                                    </ng-select>
+
+                                    <span class="error invalid-feedback d-block">{{MeetingRequiredErrorMsg}}</span>
+
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label for="OptionalAttendee">Optional Attendee(s)
+                                    </label>
+                                    <ng-select [multiple]="true" [(ngModel)]="MeetingOptionalAttendees"
+                                        name="MeetingOptionalAttendees" id="MeetingOptionalAttendees"
+                                        (keyup)="GetMeetingOptionalAttendees($event.target.value)"
+                                        (blur)="GetMeetingOptionalAttendees($event.target.value)">
+                                        <ng-option *ngFor="let user of AllOptionalAttendees" [value]="user.id">
+                                            {{user.userName}}</ng-option>
+                                    </ng-select>
+                                </div>
+
+
+
+                                <div class="form-group bu-sty">
+                                    <label for="BusinessUnits">Business Units
+                                        <span class="text-danger"> *</span>
+                                    </label>
+                                    <div class="dropdown" dropdown>
+                                        <select class="form-control" #bunit (blur)="BUvalidation(bunit.value)" name="bu"
+                                            (change)="bindStructure(bunit.value)" required>
+                                            <option disabled selected value="0">Select Business Unit</option>
+                                            <option *ngFor="let bu of BusinessUnitList" [value]="bu.id">
+                                                {{bu.value}}
+                                            </option>
+                                        </select>
+                                        <span class="error invalid-feedback d-block">{{BusinessUnitErrorMsg}}</span>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <abp-modal-footer [cancelDisabled]="saving" [saveDisabled]="!createTaskModal.form.valid || saving  ||
+         createOrUpdateActivityFormDto.activityForm.businessUnitId ==0 ||
+         TimeError" (onCancelClick)="modalRef.hide()"></abp-modal-footer>
+</form>
+</div>

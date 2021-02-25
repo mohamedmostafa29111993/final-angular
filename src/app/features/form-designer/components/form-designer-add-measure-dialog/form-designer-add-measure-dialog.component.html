@@ -1,0 +1,18 @@
+<div class="modal-popup" id="modal-popup">
+    <form class="form-horizontal" autocomplete="off" #addMeasureForm="ngForm" (ngSubmit)="addColumn()">
+
+      <abp-modal-header [title]="'Add Measure' | localize" (onCloseClick)="ModalRef.hide()" ></abp-modal-header>
+
+      <div class="modal-body">
+
+        <ng-select  [(ngModel)]="selectedColumns" [multiple]="true" name="Column" >
+          <ng-option   *ngFor="let Column of Columns" [value]="Column">{{Column.header}}
+          </ng-option>
+        </ng-select>
+        <div *ngIf="(this.errorMsg)" class="text-danger">Please select at least one Measure </div>
+      </div>
+
+      <abp-modal-footer (onCancelClick)="ModalRef.hide()"></abp-modal-footer>
+    </form>
+  </div>
+

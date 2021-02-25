@@ -1,0 +1,117 @@
+<td class="td-lg-td">
+  <div class="d-flex flex-nowrap align-items-center justify-content-between">
+    <div class="" *ngIf="!formRow.isDistributed">
+      <span
+        *ngIf="
+          !(formIndicator?.referenceId || formDimension?.referenceId) &&
+          !(formDimension?.refDimensionSum || formDimension?.referenceData) &&
+          !(
+            formIndicator?.referenceDimensionKpiSum ||
+            formIndicator?.referenceData
+          )
+        "
+        class="dropdown-lf"
+      >
+        <i (click)="delete()" class="fa fa-trash dropbtn"></i>
+      </span>
+    </div>
+    <div class="w-100">
+      <span class="tdbox">Week {{ formRow?.week }}</span>
+    </div>
+  </div>
+</td>
+<td class="second-section td-lg-td tdborder">
+  <!-- <div class="tdbox ">
+  </div> -->
+</td>
+<ng-container *ngFor="let column of formColumns; let i = index">
+  <td class="tdborder" *ngIf="!formRow.cells[i].isDeleted">
+    <!-- <div class="dropdown">
+      {{getCellTypeName(cell.typeId)}}
+      <a class="dropbtn dropdown-ellipsis">
+        <i class="fas fa-ellipsis-h WeekCellWithTooltip"></i>
+      </a>
+      <div class="dropdown-content">
+        <a class="task-font" *ngFor="let type of cellTypes" (click)="assignCellType(type.id,i)"> {{type.type}} </a>
+      </div>
+    </div> -->
+
+    <div ngbDropdown class="d-inline-block">
+      <button
+        [disabled]="
+          formIndicator?.referenceId ||
+          formDimension?.referenceId ||
+          formDimension?.refDimensionSum ||
+          formDimension?.referenceData ||
+          formIndicator?.referenceDimensionKpiSum ||
+          formIndicator?.referenceData
+        "
+        class="btn dropdown-outline-ellipsis-text"
+        id="getCellTypeName44"
+        ngbDropdownToggle
+      >
+        <i
+          class="fas fa-circle"
+          [ngClass]="{
+            'text-warning':
+              getCellTypeName(
+                formDesignerService.getTypeId(formRow?.cells, column.bindSource)
+                  .typeId
+              ) == 'User Input',
+            'text-success':
+              getCellTypeName(
+                formDesignerService.getTypeId(formRow?.cells, column.bindSource)
+                  .typeId
+              ) == 'Calculated',
+            'text-primary':
+              getCellTypeName(
+                formDesignerService.getTypeId(formRow?.cells, column.bindSource)
+                  .typeId
+              ) === 'Data soruce'
+          }"
+        ></i>
+        {{
+          getCellTypeName(
+            formDesignerService.getTypeId(formRow.cells, column.bindSource)
+              .typeId
+          )
+        }}
+        <i class="fas fa-angle-down"></i>
+      </button>
+      <div ngbDropdownMenu aria-labelledby="getCellTypeName44">
+        <button
+          [disabled]="
+            formIndicator?.referenceId ||
+            formDimension?.referenceId ||
+            formDimension?.refDimensionSum ||
+            formDimension?.referenceData ||
+            formIndicator?.referenceDimensionKpiSum ||
+            formIndicator?.referenceData
+          "
+          ngbDropdownItem
+          *ngFor="let type of cellTypes"
+          (click)="
+            assignCellType(
+              type.id,
+              i,
+              formDesignerService.getTypeId(formRow.cells, column.bindSource)
+            )
+          "
+          class="task-font"
+        >
+          <i
+            class="fas fa-circle"
+            [ngClass]="{
+              'text-warning': type.type == 'User Input',
+              'text-success': type.type == 'Calculated',
+              'text-primary': type.type == 'Data soruce'
+            }"
+          ></i>
+          {{ type.type }}
+        </button>
+      </div>
+    </div>
+
+    <span> {{ formRow.cells[i].columnBindSource }} </span>
+  </td>
+</ng-container>

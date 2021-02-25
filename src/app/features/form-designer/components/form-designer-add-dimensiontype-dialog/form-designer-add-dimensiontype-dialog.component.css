@@ -1,0 +1,26 @@
+.checkbox-container{
+    padding: 10px;
+    border: 1px solid #DDD;
+    border-radius: 10px;
+}
+
+.checkbox-container .custom-control-label::after,
+.checkbox-container .custom-control-label::before{
+border-radius: 50%;
+border-color:#0cb5cb8f;
+}
+
+.checkbox-container .custom-control-input:checked~.custom-control-label::after {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Cpath fill='%23ffffff' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26 2.974 7.25 8 2.193z'/%3E%3C/svg%3E");
+}
+
+.custom-checkbox label{
+    color:#0cb5cb;
+}
+.custom-control-input:checked~.custom-control-label::before{
+    background-color: #0cb5cb;
+}
+.custom-control-label::before{
+    box-shadow: none;
+    background-color: transparent;
+}

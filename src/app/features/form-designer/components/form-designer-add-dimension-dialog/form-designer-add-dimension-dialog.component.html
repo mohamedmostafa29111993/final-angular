@@ -1,0 +1,133 @@
+<form
+  class="form-horizontal"
+  autocomplete="off"
+  #dimensionModal="ngForm"
+  (ngSubmit)="save()"
+>
+  <abp-modal-header
+    title="Add Dimension"
+    (onCloseClick)="bsModalRef.hide()"
+  ></abp-modal-header>
+  <div class="modal-body">
+    <div class="form-group row required">
+      <label class="col-md-4 col-form-label" for="dimensionGroup"
+        >Dimension Group</label
+      >
+      <div class="col-md-8">
+        <select
+          class="form-control"
+          name="dimensionGroup"
+          id="dimensionGroup"
+          required
+          [(ngModel)]="selectedDimensionGroupId"
+          (change)="onDimensionGroupsOrBusinessUnitsChange()"
+        >
+          <option value="0" disabled>Select Dimension</option>
+          <option
+            *ngFor="let dimGroup of allDimensionGroups"
+            [value]="dimGroup.id"
+          >
+            {{ dimGroup.title }}
+          </option>
+        </select>
+        <span
+          *ngIf="showMsgDimensionGroupId"
+          class="error invalid-feedback d-block"
+        >
+          This field is required
+        </span>
+      </div>
+    </div>
+
+    <div class="form-group row required">
+      <label class="col-md-4 col-form-label" for="formBusinessUnits"
+        >Business Units</label
+      >
+      <div class="col-md-8">
+        <select
+          class="form-control"
+          name="formBusinessUnits"
+          id="formBusinessUnits"
+          required
+          [(ngModel)]="selectedBusinessUnitId"
+          (change)="onDimensionGroupsOrBusinessUnitsChange()"
+        >
+          <option value="0" disabled>Select Business Unit</option>
+          <option
+            *ngFor="let businessUnit of allFormBusinessUnits"
+            [value]="businessUnit.businessUnitId"
+          >
+            {{ businessUnit.businessUnitTitle }}
+          </option>
+        </select>
+        <span
+          *ngIf="showMsgBusinessUnitId"
+          class="error invalid-feedback d-block"
+        >
+          This field is required
+        </span>
+      </div>
+    </div>
+
+    <div class="form-group row required">
+      <label class="col-md-4 col-form-label" for="name">Dimension Title</label>
+      <div class="col-md-8">
+        <input
+          type="text"
+          class="form-control"
+          name="dimensionTitle"
+          id="dimensionTitle"
+          required
+          [(ngModel)]="dimensionPrefixTitle"
+          (keyup)="getFilteredDimensionsData()"
+          #dimensionTitleModel="ngModel"
+          #dimensionTitleEl
+        />
+        <abp-validation-summary
+          [control]="dimensionTitleModel"
+          [controlEl]="dimensionTitleEl"
+        ></abp-validation-summary>
+      </div>
+    </div>
+
+    <div class="form-group mb-0">
+      <div class="checkbox-container" *ngIf="allDimensionsData.length > 0">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="custom-control custom-checkbox">
+              <input
+                type="checkbox"
+                class="custom-control-input"
+                [id]="-1"
+                [checked]="isDimensionDataChecked(-1)"
+                (change)="onCheckAllChange($event)"
+              />
+              <label class="custom-control-label" for="-1"> Check All </label>
+            </div>
+          </div>
+          <ng-container *ngFor="let dimData of allDimensionsData">
+            <div class="col-md-6">
+              <div class="custom-control">
+                <input
+                  type="checkbox"
+                  class="custom-control-input"
+                  [id]="dimData.id"
+                  [checked]="isDimensionDataChecked(dimData.id)"
+                  (change)="onDimensionDataChange(dimData, $event)"
+                />
+                <label class="custom-control-label" [for]="dimData.id">
+                  {{ dimData.title }}
+                </label>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+  <abp-modal-footer
+    [cancelDisabled]="saving"
+    [saveDisabled]="!dimensionModal.form.valid || saving"
+    (onCancelClick)="bsModalRef.hide()"
+  ></abp-modal-footer>
+</form>

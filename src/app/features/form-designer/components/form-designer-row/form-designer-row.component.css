@@ -1,0 +1,120 @@
+
+.CellWithTooltip{
+    position:relative;
+  }
+  
+  
+  .TooltipSpan{
+    display:none;
+    position:absolute;
+    z-index:100;
+    border:1px;
+    background-color:rgba(4, 103, 161, 1);
+    border-style:solid;
+    border-width:1px;
+    border-color:rgba(4, 103, 161, 1);
+    border-radius: 6px;
+    padding:3px;
+    color:white;
+    top:30px;
+    left:20px;
+    transition: all .5s ease-in;
+  }
+  
+  .CellWithTooltip:hover span.TooltipSpan{
+    display:block;
+  }
+  
+  
+  
+   /* td {
+    vertical-align: middle !important;
+    width: auto;
+  }
+  
+ 
+  tr{
+    width: auto;
+    height: 50px;
+    
+  } */
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+  border: 1px solid #DDD;
+  float: right;
+  }
+  
+  .dropdown-content a {
+    color: black;
+    padding: 7px 10px;
+    text-decoration: none;
+    display: block;
+  }
+  
+  .dropdown-content a:hover {background-color: #ddd;}
+  
+   
+  .dropdown:hover .dropdown-content {display: block;}
+  
+   /* .dropdown {
+    position: relative;
+    display: inline-block;
+   float: right;
+    font-weight: bold;
+  
+  
+  } */
+  .dropdown-lf {
+    position: relative;
+    display: inline-block;
+   float: left;
+    font-weight: bold;
+  padding-right: 6px;
+  
+  }
+  .circle{
+    background-color: #172fb8;
+    color: whitesmok !important;
+    border-radius: 10%;
+    color: whitesmoke;
+    border: solid #172fb8 1px;
+  
+  }
+
+  /* th, td{
+    
+    background-color:whitesmoke;
+    
+  } */
+  
+  /* .tdborder{
+    border: 1px solid #f1f1f1;
+  } */
+
+  
+  .tdborder span{
+    visibility: hidden;
+  }
+  .fontawssize
+  {
+    font-size: 24px;
+  }
+  
+  
+  /* td{
+    padding: 0.4rem;
+  } */
+  .fa-trash
+  {
+    color: #ef6262;
+    font-size: 13px;
+  }
+
+  .tdborder {
+    border-bottom: 1px solid #f1f1f1;
+  }

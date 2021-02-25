@@ -1,0 +1,36 @@
+<form
+  class="form-horizontal"
+  autocomplete="off"
+  #dimensionModal="ngForm"
+  (submit)="save()"
+>
+  <abp-modal-header
+    title="Add Dimension Type"
+    (onCloseClick)="bsModalRef.hide()"
+  ></abp-modal-header>
+  <div class="modal-body">
+    <div class="form-group row required">
+      <label class="col-md-4 col-form-label" for="dimensionType"
+        >Dimension Type</label
+      >
+      <div class="col-md-8">
+        <select
+          class="form-control"
+          name="dimensionType"
+          id="dimensionType"
+          required
+          [(ngModel)]="selectedDimentionTypeId"
+        >
+          <option value="0" disabled>Select Dimension Type</option>
+          <option *ngFor="let dimType of DimentionTypes" [value]="dimType.id">
+            {{ dimType.title }}
+          </option>
+        </select>
+        <span *ngIf="!IsValidForm" class="error invalid-feedback d-block">
+          This field is required
+        </span>
+      </div>
+    </div>
+  </div>
+  <abp-modal-footer (onCancelClick)="bsModalRef.hide()"></abp-modal-footer>
+</form>

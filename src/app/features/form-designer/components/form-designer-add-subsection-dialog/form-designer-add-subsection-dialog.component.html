@@ -1,0 +1,21 @@
+<div class="modal-popup" id="modal-popup">
+    <form class="form-horizontal" autocomplete="off" #addSubsectionForm="ngForm"  (ngSubmit)="addSubsection()">
+
+      <abp-modal-header [title]="'Add Subsection' | localize" (onCloseClick)="ModalRef.hide()"></abp-modal-header>
+
+      <div class="modal-body">
+
+        <ng-select  [(ngModel)]="selectedSubsections" [multiple]="true" name="Subsection"  placeholder="Select Subsections">
+
+          <ng-option   *ngFor="let Subsection of this.FormMainSubsections" [value]="Subsection">{{Subsection.subSectionTitle}}
+          </ng-option>
+        </ng-select>
+        <div *ngIf="(this.errorMsg)" class="text-danger">Please select at least one SubSection </div>
+
+      </div>
+
+      <abp-modal-footer (onCancelClick)="ModalRef.hide()"></abp-modal-footer>
+    </form>
+  </div>
+
+

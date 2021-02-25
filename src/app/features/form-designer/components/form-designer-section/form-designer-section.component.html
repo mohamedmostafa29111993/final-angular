@@ -1,0 +1,115 @@
+<div class="container-fluid">
+  <a
+    href="javascript:;"
+    class="btn general-btn light-blue-bg w-100 mb-1"
+    [class.disabled]="isDisabledAddSection"
+    id="openPopup"
+    (click)="openPopupSection()"
+  >
+    <i class="fa fa-plus-circle pr-2"></i>
+    {{ "New Section" }}
+  </a>
+
+  <div *ngIf="allSections.length > 0" class="darg-drop-container">
+    <!-- else mainSectionDiv -->
+    <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
+      <mat-accordion
+        class="example-box"
+        *ngFor="let section of allSections; let i = index"
+        cdkDrag
+      >
+        <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
+        <mat-expansion-panel
+          [expanded]="checkExpandedPanel(i)"
+          *ngIf="!section.isDeleted"
+        >
+          <mat-expansion-panel-header *ngIf="this.allSections[0]">
+            <mat-panel-title #btnAccordion>
+              <div class="icon-title">
+                <i class="fas fa-bars"></i>
+                <span>
+                  {{ section.sectionTitle }}
+                </span>
+              </div>
+
+              <div class="dropdown" (click)="$event.stopPropagation()">
+                <div class="dropbtn">
+                  <i class="fa fa-plus-circle fa-plus-right"></i>
+                </div>
+                <div class="dropdown-content">
+                  <a
+                    class="btn subsection"
+                    [class.disabled]="isDisabledAddSubSection"
+                    (click)="
+                      this.openPopupSubsection(
+                        section.formSectionId
+                          ? section.formSectionId
+                          : section.sectionId
+                      )
+                    "
+                    ><i class="fa fa-plus-circle"></i> Add new Sub Section</a
+                  >
+                  <a
+                    class="btn subsection"
+                    (click)="
+                      deleteSection(
+                        section.formSectionId
+                          ? section.formSectionId
+                          : section.sectionId
+                      )
+                    "
+                    ><i class="fa fa-trash"></i>Delete</a
+                  >
+                </div>
+              </div>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div hide="!item.isActive">
+            <div
+              class="sub-section-content"
+              *ngFor="let subsection of section?.childern"
+            >
+              <div class="sub-section-actions" *ngIf="!subsection.isDeleted">
+                <a
+                  (click)="
+                    sendFormSectionId(
+                      true,
+                      subsection.formSubSectionId
+                        ? subsection.formSubSectionId
+                        : subsection.subSectionId,
+                      false,
+                      i
+                    )
+                  "
+                  class="pointer"
+                  #namedElement
+                  [class.active]="
+                    (subsection.formSubSectionId != 0
+                      ? subsection.formSubSectionId
+                      : subsection.subSectionId) == this.subSectionSelected
+                  "
+                >
+                  {{ subsection.subSectionTitle }}
+                </a>
+
+                <button
+                  class="icon-trash"
+                  *ngIf="section?.childern.length > 1"
+                  (click)="
+                    deleteSubSection(
+                      subsection.formSubSectionId
+                        ? subsection.formSubSectionId
+                        : subsection.subSectionId
+                    )
+                  "
+                >
+                  <i class="fa fa-trash fa-trash-right"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </div>
+</div>

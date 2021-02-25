@@ -1,0 +1,360 @@
+<td class="td-lg-td" [ngClass]="{ 'highlight-cell': schemaChecking == false }">
+  <div class="d-flex flexwrap align-items-center">
+    <a
+      class="dropdown-lf"
+      href="javascript:;"
+      *ngIf="
+        (!formIndicator?.referenceId || formDimension?.referenceId) &&
+        !(
+          formIndicator?.referenceDimensionKpiSum ||
+          formIndicator?.referenceData
+        )
+      "
+    >
+      <i class="fa fa-trash dropbtn" (click)="deleteDimension()"></i>
+    </a>
+
+    <div
+      class="d-flex flex-nowrap align-items-center justify-content-between tdbox"
+    >
+      <span class="dropdown-lf">{{ formDimension.title }}</span>
+
+      <span
+        class="mapped-icon"
+        *ngIf="checkDimensionDataMapping(formDimension) && dimMapped"
+        ngbTooltip="Mapped to Data Source"
+      >
+        <i class="fas fa-link"></i>
+      </span>
+
+      <div
+        *ngIf="
+          !formIndicator?.referenceId &&
+          !formDimension?.referenceId &&
+          !(formDimension?.refDimensionSum || formDimension?.referenceData) &&
+          !(
+            formIndicator?.referenceDimensionKpiSum ||
+            formIndicator?.referenceData
+          )
+        "
+      >
+        <i
+          class="fas fa-calculator dropbtn dropdown CellWithTooltip cursor-pointer"
+          (click)="openSumPopup()"
+        >
+          <ng-container
+            ><span class="TooltipSpan">sum dimensions</span>
+          </ng-container>
+        </i>
+        <span class="dropdown">
+          <a class="dropbtn">
+            <i class="fa fa-plus-circle CellWithTooltip">
+              <ng-container *ngIf="isSummary"
+                ><span class="TooltipSpan"
+                  >Can't Add Dimention Due to KPI Type</span
+                >
+              </ng-container>
+            </i>
+          </a>
+          <span class="dropdown-content week-dim" *ngIf="!isSummary">
+            <a href="javascript:;" (click)="addWeekDimension(false)">
+              <i class="fa fa-plus-circle"></i> Add Week Dimension
+            </a>
+          </span>
+        </span>
+
+        <div class="custom-mat-dropdown d-inline-block">
+          <!-- Start New dropdown -->
+          <!--   <div *ngIf="formDesignerService.dimensionsHierarchy != undefined"> -->
+
+          <button
+            [disabled]="
+              !formDesignerService.dimensionsHierarchy ||
+              !checkDimId() ||
+              disableDrop
+            "
+            mat-button
+            [matMenuTriggerFor]="dimMappingMenu"
+          >
+            <i class="fas fa-angle-down"></i>
+          </button>
+
+          <!--    </div> -->
+          <mat-menu #dimMappingMenu="matMenu">
+            <button mat-menu-item [matMenuTriggerFor]="dimMapping">
+              <span class="data-src"> Data Source </span>
+            </button>
+          </mat-menu>
+          <!-- (click)="$event.stopPropagation();customDimMap(dim.key,obj,formDimension)" -->
+          <form [formGroup]="highlight">
+            <mat-menu #dimMapping="matMenu">
+              <button
+                mat-menu-item
+                [matMenuTriggerFor]="mappinghighlightGroup"
+                *ngFor="
+                  let dim of formDesignerService.dimensionsHierarchy | keyvalue
+                "
+                class="custom-mat-menu"
+              >
+                <div
+                  [ngClass]="{
+                    'selected-measure': dim.key == this.selectDimType
+                  }"
+                  class="dim-key"
+                >
+                  <!-- <ng-container><span class="TooltipSpan">no kpi code</span>
+                                    </ng-container> -->
+                  <!-- <span ngbTooltip="{{dim.key}}">
+                                        {{dim.key}}
+
+                                    </span> -->
+                  {{ dim.key }}
+                </div>
+                <!-- {{dim.key}} -->
+
+                <mat-menu #mappinghighlightGroup="matMenu">
+                  <div *ngFor="let obj of dim.value">
+                    <label
+                      class="form-check-label custom-checkbox custom-mat-btn"
+                      for="{{ obj }}"
+                      (click)="
+                        $event.preventDefault();
+                        customDimMap(
+                          dim.key,
+                          obj,
+                          formDimension,
+                          checkmapping.checked
+                        )
+                      "
+                      [class.selected-measure]="
+                        checkExistingDataSource(
+                          obj,
+                          highlight.get('mappingRadio').value
+                        )?.dataSelector && highlight.get('mappingRadio').value
+                      "
+                    >
+                      <input
+                        type="radio"
+                        formControlName="mappingRadio"
+                        #checkmapping
+                        [value]="obj"
+                        class="form-check-input"
+                        id="{{ obj }}"
+                        name="mappingRadio"
+                        mdbInput
+                      />
+                      <span class="checkbox-radio-custom-label">{{ obj }}</span>
+                    </label>
+                  </div>
+                </mat-menu>
+              </button>
+            </mat-menu>
+          </form>
+          <!-- End New dropdown -->
+        </div>
+      </div>
+    </div>
+  </div>
+</td>
+<td class="second-section td-lg-td tdborder">
+  <div
+    *ngIf="
+      !formIndicator?.referenceId &&
+      !formDimension?.referenceId &&
+      !(formDimension?.refDimensionSum || formDimension?.referenceData) &&
+      !(formIndicator?.referenceDimensionKpiSum || formIndicator?.referenceData)
+    "
+    class="d-flex justify-content-between"
+  >
+    <div class="title-of-toggle details-toggle">
+      <div class="d-flex">
+        <div class="CellWithTooltip">
+          <label> Type:</label>
+          <ui-switch
+            name="isSummary"
+            size="small"
+            color="rgb(0, 189, 99)"
+            switchColor="#fff"
+            defaultBgColor="#3c8dbc"
+            defaultBoColor="#3c8dbc"
+            checkedTextColor="#fff"
+            uncheckedTextColor="#fff"
+            (ngModelChange)="isSummaryEvent($event)"
+            [ngModel]="isSummary"
+            [disabled]="
+              (!isSummary && formDimension.dimensionWeeks?.length > 0) ||
+              isDistrbuted
+            "
+            (change)="ngOnChanges($event)"
+          >
+            <span>{{ isSummary | json }} </span>
+          </ui-switch>
+        </div>
+      </div>
+    </div>
+    <div class="title-of-toggle show-toggle">
+      <div class="d-flex">
+        <div class="CellWithTooltip">
+          <label> Total: </label>
+          <ui-switch
+            name="total"
+            size="small"
+            color="rgb(0, 189, 99)"
+            switchColor="#fff"
+            defaultBgColor="#3c8dbc"
+            defaultBoColor="#3c8dbc"
+            checkedTextColor="#fff"
+            uncheckedTextColor="#fff"
+            [ngModel]="showValues"
+            (ngModelChange)="showValuesEvent($event)"
+          >
+            <span>
+              {{ showValues | json }}
+            </span>
+          </ui-switch>
+        </div>
+      </div>
+    </div>
+    <div>
+      <button
+        mat-button
+        [matMenuTriggerFor]="menuEquationDim"
+        ngbTooltip="Equation Type"
+      >
+        <i class="fas fa-angle-down"></i>
+      </button>
+      <mat-menu #menuEquationDim="matMenu">
+        <mat-radio-group
+          [(ngModel)]="formDimension.equationTypeId"
+          aria-labelledby="example-radio-group-label"
+          class="example-radio-group"
+          (change)="equationTypeChange($event)"
+        >
+          <mat-radio-button
+            class="example-margin w-100 d-block px-3"
+            *ngFor="let equation of equationTypes"
+            [value]="equation.id"
+            >{{ equation.type }}
+          </mat-radio-button>
+        </mat-radio-group>
+      </mat-menu>
+    </div>
+    <div *ngIf="isSummary">
+      <button
+        (click)="addWeekDimensionForDistribution()"
+        ngbTooltip="Distribution"
+        class="btn p-0 btn-distr"
+      >
+        <!-- <img src="../../../assets/img/distributed.png" alt=""> -->
+        <i class="fas fa-sitemap"></i>
+        <!-- <i class="fas fa-cube"></i> -->
+      </button>
+    </div>
+  </div>
+</td>
+<ng-container *ngFor="let cell of formColumns; let i = index">
+  <td class="tdborder">
+    <ng-container *ngIf="isSummary && !formDimension.cells[i].isDeleted">
+      <div *ngIf="isSummary">
+        <!-- <div class="dropdown">
+        {{getCellTypeName(cell.typeId)}}
+        <a class="dropbtn dropdown-ellipsis">
+          <i class="fas fa-ellipsis-h WeekCellWithTooltip"></i>
+        </a>
+        <div class="dropdown-content">
+          <a class="task-font" *ngFor="let type of cellTypes" (click)="assignCellType(type.id,i)"> {{type.type}} </a>
+        </div>
+      </div> -->
+
+        <div ngbDropdown class="">
+          <!-- <button class="btn dropdown-outline-ellipsis-text" id="" ngbDropdownToggle> -->
+          <button
+            [disabled]="
+              formIndicator?.referenceId ||
+              formDimension?.referenceId ||
+              formDimension?.refDimensionSum ||
+              formDimension?.referenceData ||
+              formIndicator?.referenceDimensionKpiSum ||
+              formIndicator?.referenceData
+            "
+            class="btn dropdown-outline-ellipsis-text"
+            id="getCellTypeName"
+            ngbDropdownToggle
+          >
+            <i
+              class="fas fa-circle"
+              [ngClass]="{
+                'text-warning':
+                  getCellTypeName(
+                    formDesignerService.getTypeId(
+                      formDimension?.cells,
+                      cell.bindSource
+                    ).typeId
+                  ) == 'User Input',
+                'text-success':
+                  getCellTypeName(
+                    formDesignerService.getTypeId(
+                      formDimension?.cells,
+                      cell.bindSource
+                    ).typeId
+                  ) == 'Calculated',
+                'text-primary':
+                  getCellTypeName(
+                    formDesignerService.getTypeId(
+                      formDimension?.cells,
+                      cell.bindSource
+                    ).typeId
+                  ) === 'Data soruce'
+              }"
+            ></i>
+            {{
+              getCellTypeName(
+                formDesignerService.getTypeId(
+                  formDimension?.cells,
+                  cell.bindSource
+                ).typeId
+              )
+            }}
+            <i class="fas fa-angle-down"></i>
+          </button>
+          <div ngbDropdownMenu aria-labelledby="">
+            <button
+              [disabled]="
+                formIndicator?.referenceId ||
+                formDimension?.referenceId ||
+                formDimension?.refDimensionSum ||
+                formDimension?.referenceData ||
+                formIndicator?.referenceData ||
+                formIndicator?.referenceDimensionKpiSum
+              "
+              ngbDropdownItem
+              *ngFor="let type of cellTypes"
+              (click)="
+                assignCellType(
+                  type.id,
+                  i,
+                  formDesignerService.getTypeId(
+                    formDimension?.cells,
+                    cell.bindSource
+                  )
+                )
+              "
+              class="task-font"
+            >
+              <i
+                class="fas fa-circle"
+                [ngClass]="{
+                  'text-warning': type.type == 'User Input',
+                  'text-success': type.type == 'Calculated',
+                  'text-primary': type.type === 'Data soruce'
+                }"
+              ></i>
+              {{ type.type }}
+            </button>
+          </div>
+        </div>
+      </div>
+      <span> {{ formDimension.cells[i].columnBindSource }}</span>
+    </ng-container>
+  </td>
+</ng-container>

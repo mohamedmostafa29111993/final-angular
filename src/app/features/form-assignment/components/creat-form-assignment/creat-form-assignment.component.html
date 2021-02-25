@@ -1,0 +1,86 @@
+<form
+  class="form-horizontal"
+  #createFormAssignmentModal="ngForm"
+  (ngSubmit)="SaveFormAssignment()"
+>
+  <table class="table table-hover remove-table-margin table-layout">
+    <thead>
+      <tr>
+        <th>{{ "Form" | localize }}</th>
+        <th>{{ "User" | localize }}</th>
+        <th>{{ "Business Units" | localize }}</th>
+        <th>{{ "Actions" | localize }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="bg-color">
+        <td>
+          <select
+            class="form-control"
+            #mySelect
+            [(ngModel)]="this.userFormAssignment.userForms.formId"
+            required
+            name="drop_formId"
+            (change)="getFilteredBusinessUnits($event.target.value)"
+            (click)="checkFormValue()"
+          >
+            <option *ngFor="let form of FormList" [value]="form.formId">
+              {{ form.formName }}
+            </option>
+          </select>
+          <span
+            class="error invalid-feedback d-block span-sty"
+            *ngIf="!FromValid"
+            >From is required</span
+          >
+        </td>
+        <td>
+          <ng-select
+            [(ngModel)]="this.userFormAssignment.userForms.formUserId"
+            (keyup)="getUserslist($event.target.value)"
+            name="drop_userId"
+            (click)="checkUserValue()"
+            (change)="checkUserValue()"
+          >
+            <ng-option *ngFor="let user of Users" [value]="user.userId">{{
+              user.userName
+            }}</ng-option>
+          </ng-select>
+          <span
+            class="error invalid-feedback d-block span-sty"
+            *ngIf="!UserValid"
+            >{{ userErorrMsg }}</span
+          >
+        </td>
+        <td>
+          <ng-select
+            [multiple]="true"
+            required
+            [(ngModel)]="this.userFormAssignment.userForms.businessFormList"
+            name="BusinessUnit"
+            (click)="checkBusinessUnitValue()"
+            (change)="checkBusinessUnitValue()"
+          >
+            <ng-option
+              *ngFor="let bu of BusinessUnitsList"
+              [value]="bu.businessUnitId"
+            >
+              {{ bu.businessUnitTitle }}
+            </ng-option>
+          </ng-select>
+          <span
+            class="error invalid-feedback d-block span-sty"
+            *ngIf="!businessUnitValid"
+            >Business Unit is required</span
+          >
+        </td>
+        <td>
+          <button type="submit" class="btn bg-blue ng-tns-c84-2">
+            <i class="fa fa-plus-square ng-tns-c84-2"></i> &nbsp;
+            {{ "Add" | localize }}
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</form>

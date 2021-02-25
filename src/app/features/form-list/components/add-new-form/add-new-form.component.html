@@ -1,0 +1,119 @@
+<form class="form-horizontal" #createTaskModal="ngForm" (ngSubmit)="SaveForm()">
+  <table class="table table-hover remove-table-margin table-layout">
+    <thead class="bg-light">
+      <tr>
+        <th>{{ "Role" | localize }} </th>
+        <th>{{ "Code" | localize }} </th>
+        <th>{{ "Period" | localize }}</th>
+        <th>{{ "Business Unit" | localize }}</th>
+        <th>{{ "Status" | localize }}</th>
+        <th>{{ "Display" | localize }}</th>
+        <th class="td-middle">{{ "Actions" | localize }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="bg-color">
+        <td class="custom-option-selected">
+          <ng-select [(ngModel)]="selectedBusinessRole" name="Role"
+            (change)="checkBusinessRoleValue()" (keyup)="getFilteredBusinessRoles($event.target.value)"
+            (click)="checkBusinessRoleValue()" [items]="filteredBusinessRoles" bindLabel="title" bindValue="id"
+            required>
+            <ng-template ng-option-tmp let-item="item">
+              <div [title]="item.title">{{item.title}}</div>
+          </ng-template>
+          </ng-select>
+
+
+
+          <span class="error invalid-feedback d-block span-sty" *ngIf="businessRoleerrmsg">Business Role is
+            required</span>
+
+        </td>
+        <td>
+          <input type="text" class="form-control" name="formCode" required [(ngModel)]="this.formEditDto.formCode" />
+          <span class="error invalid-feedback d-block span-sty" *ngIf="this.formCodeErrorMsg">Form code is
+            required</span>
+        </td>
+        <td>
+          <select class="form-control" name="Period" [(ngModel)]="selectedFormTypeId" required (change)="checkPeriodType($event)">
+            <option disabled selected value="0">Select
+            </option>
+            <option *ngFor="let type of formTypes" [value]="type.id">
+              {{type.title}}
+            </option>
+          </select>
+          <span class="error invalid-feedback d-block span-sty">{{formTypeMsg}}</span>
+
+          <!-- <abp-validation-summary [control]="startDateModel"
+            [controlEl]="startDateEl"></abp-validation-summary> -->
+        </td>
+        <td>
+          <!-- <ng-select [multiple]="true" name="BusinessUnit">
+            <ng-option [value]="1">ASH</ng-option>
+          </ng-select> -->
+
+          <!-- <ng-select [(ngModel)]="selectedBusinessUnits"  [multiple]="true" name="BusinessUnit" (change)="checkBusinessUnitValue()"
+            (keyup)="getFilteredBusinessUnits($event.target.value)" (click)="checkBusinessUnitValue()">
+            <ng-option *ngFor="let BU of filteredBusinessUnits"  [value]="BU">{{BU.title}}</ng-option>
+          </ng-select> -->
+
+          <ng-select [(ngModel)]="selectedBusinessUnits" [multiple]="true" name="BusinessUnit"
+            (change)="checkBusinessUnitValue()" (keyup)="getFilteredBusinessUnits($event.target.value)"
+            (click)="checkBusinessUnitValue()" [items]="filteredBusinessUnits" bindLabel="bindLabel" bindValue="id"
+            required>
+            <ng-template ng-label-tmp let-item="item" let-clear="clear">
+              <span class="ng-value-label">{{ item.shortTitle }}</span>
+              <span class="ng-value-icon right" (click)="clear(item)">x</span>
+            </ng-template>
+          </ng-select>
+
+          <span class="error invalid-feedback d-block span-sty" *ngIf="businessUniterrmsg">Business Units are
+            required</span>
+
+        </td>
+        <td class="td-vertical-align">Not Started</td>
+        <td class="td-vertical-align">
+          <!-- <ui-switch name="formDisplayType" [(ngModel)]="this.formDisplayType" size="medium" color="rgb(0, 189, 99)"
+            switchColor="#fff" defaultBgColor="#3c8dbc" defaultBoColor="#3c8dbc" checkedLabel="Summary"
+            uncheckedLabel="Details" checkedTextColor="#fff" uncheckedTextColor="#fff" [disabled]="disableDisplayToggle">
+          </ui-switch> -->
+
+
+          <!-- <ui-switch name="formDisplayType" [(ngModel)]="this.formDisplayType" size="medium" color="rgb(0, 189, 99)"
+          switchColor="#fff" defaultBgColor="#3c8dbc" defaultBoColor="#3c8dbc" checkedLabel="Summary"
+          uncheckedLabel="Details" checkedTextColor="#fff" uncheckedTextColor="#fff" [disabled]="disableDisplayToggle">
+        </ui-switch> -->
+
+
+
+
+          <div class="title-of-toggle details-toggle">
+            <div class="d-flex">
+                <div class="CellWithTooltip">
+                    <label> Type: </label>
+                    <ui-switch name="formDisplayType" size="small" color="rgb(0, 189, 99)" switchColor="#fff"
+                        defaultBgColor="#3c8dbc" defaultBoColor="#3c8dbc" checkedTextColor="#fff"
+                        uncheckedTextColor="#fff" [(ngModel)]="this.formDisplayType" [disabled]="disableDisplayToggle">
+                        <span>Summary</span>
+                    </ui-switch>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+        </td>
+        <td class="td-middle">
+          <button type="submit" class="btn bg-blue ng-tns-c84-2">
+            <i class="fa fa-plus-square ng-tns-c84-2"></i> &nbsp; {{ "Save" | localize }}
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</form>

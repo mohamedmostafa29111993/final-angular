@@ -1,0 +1,13 @@
+<div class="modal-footer" style="border-top: 1px solid #ccc;">
+  <button
+    type="button"
+    class="btn btn-default btn-cancel"
+    [disabled]="cancelDisabled"
+    (click)="onCancelClick.emit()"
+  >
+    {{ cancelLabel }}
+  </button>
+  <button type="submit" class="btn btn-primary btn-submit" [disabled]="saveDisabled">
+    {{ saveLabel }}
+  </button>
+</div>

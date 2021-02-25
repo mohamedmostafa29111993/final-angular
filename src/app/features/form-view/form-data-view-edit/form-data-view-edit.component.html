@@ -1,0 +1,170 @@
+<section class="content px-2">
+  <!-- start coding -By Meska- -->
+  <div class="no-business-form" *ngIf="noBusinessForm">
+    <div class="hand-icon">
+      <img src="../../../../assets/hand-icon.png" alt="NO Business Form" />
+    </div>
+    <h6>Please Select Your Criteria That You Need To See</h6>
+  </div>
+  <!-- end coding -By Meska- -->
+
+  <div class="container-fluid cf-margin">
+    <h5 *ngIf="isLoading && !noBusinessForm" class="loader-icon">
+      <img
+        class="logo-loader"
+        src="../../../../assets/img/logo.png"
+        alt="Loader"
+      />
+    </h5>
+    <div *ngIf="!isLoading && formSections?.length > 0">
+      <div class="business-form-actions">
+        <button (click)="getExportUrl()" class="btn export-btn">
+          <span class="export-icon">
+            <img
+              class="logo-loader"
+              src="../../../../assets/export-icon.png"
+              width="25"
+              alt="Export"
+            />
+          </span>
+          <span class="btn-text"> Export </span>
+        </button>
+        <button class="btn import-btn" *ngIf="false">
+          <span class="import-icon">
+            <img
+              class="logo-loader"
+              src="../../../../assets/import-icon.png"
+              width="20"
+              alt="Export"
+            />
+          </span>
+          <span class="btn-text"> Import </span>
+        </button>
+      </div>
+
+      <div class="tables-section form-view">
+        <mat-accordion
+          class="example-box my-2"
+          *ngFor="let section of formSections; let i = index"
+        >
+          <mat-expansion-panel [expanded]="i == 0 ? true : false">
+            <mat-expansion-panel-header>
+              <mat-panel-title #btnAccordion>
+                <div class="icon-title">
+                  <!-- <i class="fas fa-bars"></i> -->
+                  <span>
+                    {{ section.title }}
+                  </span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div hide="!item.isActive">
+              <ng-container *ngIf="!section?.subsections">
+                <ngx-skeleton-loader
+                  count="1"
+                  [theme]="{
+                    height: '50px'
+                  }"
+                ></ngx-skeleton-loader>
+                <ngx-skeleton-loader count="5"></ngx-skeleton-loader>
+              </ng-container>
+              <ng-container *ngIf="section?.subsections">
+                <ng-container *ngFor="let subsection of section.subsections">
+                  <div class="table-content">
+                    <table>
+                      <thead>
+                        <tr *ngIf="subsection.columns?.length > 0">
+                          <th scope="col" class="text-light form-title">
+                            {{ subsection.title }}
+                          </th>
+                          <ng-container>
+                            <th
+                              *ngFor="let column of subsection.columns"
+                              scope="col"
+                              class="cell-titles"
+                              [ngClass]="{
+                                'actual-header':
+                                  column.bindSource?.toLowerCase() === 'actual',
+                                'actual-growth':
+                                  column.bindSource?.toLowerCase() ===
+                                  'actual_growth_bp',
+                                'actual-growth-achievement':
+                                  column.bindSource?.toLowerCase() ===
+                                  'bp_growth_achievement'
+                              }"
+                            >
+                              <div>
+                                {{ column.header }}
+                              </div>
+                            </th>
+                          </ng-container>
+                        </tr>
+                      </thead>
+                      <!-- <tbody *ngIf="!formStructureData">
+                                            <tr>
+                                                <div class="no-data-section">
+                                                    <p>There Is No Data To Show!</p>
+                                                </div>
+                                            </tr>
+                                        </tbody> -->
+                      <tbody
+                        app-form-data-body
+                        [formId]="formStructureData.formId"
+                        [weeksCalender]="weeksCalender"
+                        [Month]="month"
+                        [Weeks]="weeks"
+                        [Year]="yearId"
+                        [businessUnitId]="formStructureData.businessUnitId"
+                        [subsection]="subsection"
+                      ></tbody>
+                      <!-- <tbody app-form-data-section [updateActivitiesCountEvent]="updateActivitiesCountEventsSubject.asObservable()" [formSection]="section" [formData]="formData" (addMeeting)="openAddMeetingPopUp($event)" (addTaskAndIssue)="openAddTaskAndIssuePopUp($event)">
+                                    </tbody> -->
+                    </table>
+                  </div>
+                </ng-container>
+              </ng-container>
+            </div>
+          </mat-expansion-panel>
+        </mat-accordion>
+        <!-- <ng-container *ngFor="let section of formSections; let index = i">
+                    <div class="section-wrapper">
+                        <div class="business-form-section-header" (click)="targetSection = index;">
+                            <i class="fas" [ngClass]="{'fa-chevron-up': targetSection === index, 'fa-chevron-down': targetSection !== index }"></i>
+                            <h6>{{section.title}}</h6>
+                        </div>
+                        <ng-container *ngFor="let subsection of section.subsections">
+                            <div class="table-content" [class.hidden]="targetSection === index">
+                                <table>
+                                    <thead>
+                                        <tr *ngIf="subsection.columns?.length > 0">
+                                            <th scope="col" class="text-light form-title">{{subsection.title}} </th>
+                                            <ng-container>
+                                                <th *ngFor="let column of subsection.columns" scope="col" class="cell-titles" [ngClass]="{'actual-header': column.bindSource?.toLowerCase() === 'actual', 'actual-growth': column.bindSource?.toLowerCase() === 'actual_growth_bp', 'actual-growth-achievement': column.bindSource?.toLowerCase() === 'bp_growth_achievement'}">
+                                                    <div>
+                                                        {{column.header}}
+                                                    </div>
+                                                </th>
+                                            </ng-container>
+                                        </tr>
+                                    </thead>
+                                    <tbody *ngIf="!formStructureData">
+                                        <tr>
+                                            <div class="no-data-section">
+                                                <p>There Is No Data To Show!</p>
+                                            </div>
+                                        </tr>
+                                    </tbody>
+                <tbody app-form-data-body [formId]="formStructureData.formId" [Month]="month" [Weeks]="weeks" [Year]="yearId" [businessUnitId]="formStructureData.businessUnitId" [subsection]="subsection">
+                </tbody>
+                <tbody app-form-data-section [updateActivitiesCountEvent]="updateActivitiesCountEventsSubject.asObservable()" [formSection]="section" [formData]="formData" (addMeeting)="openAddMeetingPopUp($event)" (addTaskAndIssue)="openAddTaskAndIssuePopUp($event)">
+                                </tbody>
+                </table>
+            </div>
+
+            </ng-container>
+        </div>
+        </ng-container> -->
+      </div>
+    </div>
+  </div>
+</section>

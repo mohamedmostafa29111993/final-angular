@@ -1,0 +1,34 @@
+<div class="modal-popup" id="modal-popup">
+  <form
+    class="form-horizontal"
+    autocomplete="off"
+    #addKPIForm="ngForm"
+    (ngSubmit)="addKPI()"
+  >
+    <abp-modal-header
+      [title]="'Add KPI' | localize"
+      (onCloseClick)="ModalRef.hide()"
+    ></abp-modal-header>
+
+    <div class="modal-body">
+      <ng-select
+        [(ngModel)]="selectedKPIs"
+        [multiple]="true"
+        name="KPI"
+        (keyup)="getFilteredKPIs($event.target.value)"
+      >
+        <ng-option
+          [disabled]="CheckKPI(kpi.id)"
+          *ngFor="let kpi of filteredKPIs"
+          [value]="kpi"
+          >{{ kpi.title }}
+        </ng-option>
+      </ng-select>
+      <div *ngIf="this.errorMsg" class="text-danger">
+        Please select at least one KPI
+      </div>
+    </div>
+
+    <abp-modal-footer (onCancelClick)="ModalRef.hide()"></abp-modal-footer>
+  </form>
+</div>

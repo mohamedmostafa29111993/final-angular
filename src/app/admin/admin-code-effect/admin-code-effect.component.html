@@ -1,0 +1,61 @@
+
+
+<!-- <section class="content px-2">
+    <div class="container-fluid">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-4 border-right">
+                        <select class="form-control" #mySelect (change)="getSectionsByForm(mySelect.value)"  >
+                        <option value="0">Select Form</option>
+                        <option *ngFor="let form of FormList" [value]="form.formId">
+                            {{form.formName}}
+                        </option>
+                    </select>
+
+                    </div>
+
+                    <div class="col-2">
+                        <select class="form-control" #sec (change)="getColumnBySection(sec.value)"  >
+
+                            <option value="0">Select Section</option>
+                            <option *ngFor="let sec of Sections" [value]="sec.sectionId">
+
+                                {{sec.sectionName}}
+
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-4">
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</section> -->
+<div class="container">
+    <div class="row">
+    <!--   <div class="col-md-3">
+        <h4>Headers</h4>
+        <h5 *ngIf="isLoaded" class="text-primary">Loading...</h5>
+        <ul class="coloms">
+          <li *ngFor="let item of templateFieldsHeaders;">
+            <a (click)="getRule(item)">
+              <span class="badge">{{item.id}}</span> {{item.header }}
+            </a>
+          </li>
+        </ul>
+      </div> -->
+      <div class="col-md-3">
+    <app-code-effect ></app-code-effect><!-- [ruleData]="data" -->
+</div>
+
+    </div>
+
+  </div>
+
+

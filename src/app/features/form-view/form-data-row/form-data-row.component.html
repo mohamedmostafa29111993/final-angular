@@ -1,0 +1,529 @@
+<!-- Kpi -->
+<ng-container>
+  <!-- [attr.colspan]='14' -->
+  <th
+    class="align-middle dimension-title"
+    *ngIf="structureTypeId == structureType.KPI"
+  >
+    <div class="d-flex align-items-center">
+      <!-- start coding -By Meska- -->
+      <!-- <span class="mr-1" ngbTooltip="{{kpi.title}} -- {{kpi.code}}">
+            {{kpi.title | slice:0:5}} -- {{kpi.code | slice:0:5}}..
+        </span> -->
+
+      <span class="mr-1">
+        {{ kpi.code }}
+      </span>
+      <!-- end coding -By Meska- -->
+
+      <div class="dropdown">
+        <!-- <a class="dropbtn"><i class="fa fa-plus"></i></a> -->
+        <div class="dropdown-container d-flex">
+          <div ngbDropdown class="d-inline-block mr-1">
+            <button
+              class="btn dropdown-outline-ellipsis-icon"
+              id="dimensionWeek1"
+              ngbDropdownToggle
+            >
+              <i class="fas fa-info"></i>
+            </button>
+            <div ngbDropdownMenu aria-labelledby="dimensionWeek1">
+              <button ngbDropdownItem class="task-font">
+                <i class="fas fa-tasks"></i> Task :
+                {{ kpi.activityCountDto?.taskCount }}
+              </button>
+              <button ngbDropdownItem class="Issue-font">
+                <i class="fas fa-bug"></i>Issue :
+                {{ kpi.activityCountDto?.issueCount }}
+              </button>
+              <button ngbDropdownItem class="Meeting-font">
+                <i class="fas fa-handshake"></i> Meeting :
+                {{ kpi.activityCountDto?.meetingCount }}
+              </button>
+            </div>
+          </div>
+
+          <div ngbDropdown class="d-inline-block" ngbTooltip="Add">
+            <button
+              class="btn dropdown-outline-ellipsis-icon"
+              id="dimensionWeek2"
+              ngbDropdownToggle
+            >
+              <i class="fas fa-plus"></i>
+            </button>
+            <div ngbDropdownMenu aria-labelledby="dimensionData2">
+              <button
+                ngbDropdownItem
+                (click)="
+                  openPopupIssueAndTask(
+                    kpi?.cells,
+                    activityType.Task,
+                    kpi.activityCountDto
+                  )
+                "
+              >
+                Task
+              </button>
+              <button
+                ngbDropdownItem
+                (click)="
+                  openPopupIssueAndTask(
+                    kpi?.cells,
+                    activityType.Issue,
+                    kpi.activityCountDto
+                  )
+                "
+              >
+                Issue
+              </button>
+              <button
+                ngbDropdownItem
+                (click)="
+                  openPopupMeeting(
+                    kpi?.cells,
+                    activityType.Meeting,
+                    kpi.activityCountDto
+                  )
+                "
+              >
+                Meeting
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </th>
+</ng-container>
+<!-- /Kpi -->
+<!-- dimension data-->
+<!-- <ng-container *ngIf="structureTypeId == structureType.DynamicDimension">
+    <a href="javascript:;" (click)="addDynamicDim()"   class="ng-star-inserted"><i  class="fa fa-plus-circle"></i>&nbsp; Add Dynamic</a>
+</ng-container> -->
+<ng-container
+  *ngIf="
+    structureTypeId == structureType.DimensionData ||
+    (structureTypeId == structureType.DynamicDimension &&
+      dimensionData.dynamicTitle)
+  "
+>
+  <th class="second-section cash-credit-cell">
+    <div
+      [ngStyle]="{
+        'border-color': dimensionData?.dimensionWeeks?.length
+          ? '#90ccba !important'
+          : '#a9abad1c'
+      }"
+      class="d-flex justify-content-between"
+    >
+      <span class="week-title" *ngIf="!dimensionData.dynamicTitle">
+        {{ dimensionData.title }}
+      </span>
+
+      <span *ngIf="dimensionData.dynamicTitle" class="dropdown-lf">
+        <i
+          (click)="openDeleteDynamicDimentionPopup()"
+          class="fa fa-trash dropbtn"
+        ></i>
+      </span>
+      <input
+        class="week-title form-control ng-pristine ng-valid ng-touched"
+        *ngIf="dimensionData.dynamicTitle"
+        type="text"
+        (change)="updateDynamicTitle($event)"
+        value="{{ dimensionData.dynamicTitle }} "
+      />
+
+      <!-- <span class="week-title" >
+
+                {{dimensionData.dynamicTitle}}
+           </span> -->
+      <div class="dropdown">
+        <!-- <a class="dropbtn">
+                <i class="fa fa-plus"></i>
+            </a> -->
+        <div class="dropdown-container">
+          <div ngbDropdown class="d-inline-block">
+            <button
+              class="btn dropdown-outline-ellipsis-icon"
+              id="dimensionWeek1"
+              ngbDropdownToggle
+            >
+              <i class="fas fa-info"></i>
+            </button>
+            <div ngbDropdownMenu aria-labelledby="dimensionWeek1">
+              <button ngbDropdownItem class="task-font">
+                <i class="fas fa-tasks"></i> Task :
+                {{ dimensionData.activityCountDto?.taskCount }}
+              </button>
+              <button ngbDropdownItem class="Issue-font">
+                <i class="fas fa-bug"></i>Issue :
+                {{ dimensionData.activityCountDto?.issueCount }}
+              </button>
+              <button ngbDropdownItem class="Meeting-font">
+                <i class="fas fa-handshake"></i> Meeting :
+                {{ dimensionData.activityCountDto?.meetingCount }}
+              </button>
+            </div>
+          </div>
+
+          <div ngbDropdown class="d-inline-block">
+            <button
+              class="btn dropdown-outline-ellipsis-icon"
+              id="dimensionWeek2"
+              ngbDropdownToggle
+            >
+              <i class="fas fa-plus"></i>
+            </button>
+            <div ngbDropdownMenu aria-labelledby="dimensionData2">
+              <button
+                ngbDropdownItem
+                (click)="
+                  openPopupIssueAndTask(
+                    dimensionData?.cells,
+                    activityType.Task,
+                    dimensionData.activityCountDto
+                  )
+                "
+              >
+                Task
+              </button>
+              <button
+                ngbDropdownItem
+                (click)="
+                  openPopupIssueAndTask(
+                    dimensionData?.cells,
+                    activityType.Issue,
+                    dimensionData.activityCountDto
+                  )
+                "
+              >
+                Issue
+              </button>
+              <button
+                ngbDropdownItem
+                (click)="
+                  openPopupMeeting(
+                    dimensionData?.cells,
+                    activityType.Meeting,
+                    dimensionData.activityCountDto
+                  )
+                "
+              >
+                Meeting
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </th>
+</ng-container>
+<!--DynamicContainer-->
+
+<!--/DynamicContainer-->
+
+<!-- /dimension -->
+<!-- dimension week -->
+<ng-container *ngIf="structureTypeId == structureType.DimensionWeek">
+  <th class="second-section week-title-th">
+    <div class="d-flex justify-content-between">
+      <span class="week-title"
+        >{{ dimensionWeek.title }} {{ dimensionWeek.week }}</span
+      >
+      <div class="dropdown-container">
+        <div ngbDropdown class="d-inline-block">
+          <button
+            class="btn dropdown-outline-ellipsis-icon"
+            id="dimensionWeek1"
+            ngbDropdownToggle
+          >
+            <i class="fas fa-info"></i>
+          </button>
+          <div ngbDropdownMenu aria-labelledby="dimensionWeek1">
+            <button ngbDropdownItem class="task-font">
+              <i class="fas fa-tasks"></i> Task :
+              {{ dimensionWeek.activityCountDto?.taskCount }}
+            </button>
+            <button ngbDropdownItem class="Issue-font">
+              <i class="fas fa-bug"></i>Issue :
+              {{ dimensionWeek.activityCountDto?.issueCount }}
+            </button>
+            <button ngbDropdownItem class="Meeting-font">
+              <i class="fas fa-handshake"></i> Meeting :
+              {{ dimensionWeek.activityCountDto?.meetingCount }}
+            </button>
+          </div>
+        </div>
+
+        <div ngbDropdown class="d-inline-block" ngbTooltip="Add">
+          <button
+            class="btn dropdown-outline-ellipsis-icon"
+            id="dimensionWeek2"
+            ngbDropdownToggle
+          >
+            <i class="fas fa-plus"></i>
+          </button>
+          <div ngbDropdownMenu aria-labelledby="dimensionWeek2">
+            <button
+              ngbDropdownItem
+              (click)="
+                openPopupIssueAndTask(
+                  dimensionWeek?.cells,
+                  activityType.Task,
+                  dimensionWeek.activityCountDto
+                )
+              "
+            >
+              Task
+            </button>
+            <button
+              ngbDropdownItem
+              (click)="
+                openPopupIssueAndTask(
+                  dimensionWeek?.cells,
+                  activityType.Issue,
+                  dimensionWeek.activityCountDto
+                )
+              "
+            >
+              Issue
+            </button>
+            <button
+              ngbDropdownItem
+              (click)="
+                openPopupMeeting(
+                  dimensionWeek?.cells,
+                  activityType.Meeting,
+                  dimensionWeek.activityCountDto
+                )
+              "
+            >
+              Meeting
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </th>
+</ng-container>
+<!-- /dimension week -->
+<ng-container
+  *ngIf="
+    structureTypeId == structureType.DimensionWeek ||
+    (structureTypeId == structureType.KPI && kpi.showValues) ||
+    ((structureTypeId == structureType.DimensionData ||
+      (structureTypeId == structureType.DynamicDimension &&
+        dimensionData.dynamicTitle)) &&
+      dimensionData.showValues)
+  "
+>
+  <ng-container *ngFor="let cell of cells; let i = index">
+    <td
+      class="second-section"
+      [ngClass]="{
+        'yellow-input':
+          cell.typeId == cellType.UserInput &&
+          structureTypeId != structureType.DynamicDimension
+      }"
+    >
+      <div class="d-flex justify-content-between cell-dropdown-input">
+        <div
+          class="custom-scale"
+          [ngbTooltip]="
+            cell.typeId == cellType.UserInput && cell.dataId == 0
+              ? 'add data'
+              : cell.columnBindSource
+          "
+        >
+          <span class="cell-val">
+            <ng-container
+              *ngIf="
+                cell.typeId == cellType.UserInput &&
+                  structureTypeId != structureType.DynamicDimension;
+                then write;
+                else read
+              "
+            >
+            </ng-container>
+          </span>
+          <ng-template #read>
+            {{ cell.value | number: "1.0-0" }}
+          </ng-template>
+          <ng-template #write>
+            <input
+              type="number"
+              [(ngModel)]="cell.value"
+              class="form-control dashed yellow-cell"
+              (click)="inputClick(i)"
+              (blur)="inputChange(i)"
+            />
+          </ng-template>
+          <ng-container *ngIf="cell.columnIsPercentage"> %</ng-container>
+          <!-- <span class="TooltipSpan">{{cell.columnBindSource}}</span> -->
+        </div>
+
+        <div
+          *ngIf="
+            cell.typeId == cellType.DataSource ||
+            (cell.typeId == cellType.UserInput && cell.dataId > 0)
+          "
+          class="dropdown-container"
+        >
+          <!-- <div ngbDropdown class="d-inline-block">
+                        <button class="btn btn dropdown-outline-ellipsis-icon" id="activityCount" ngbDropdownToggle>
+                            <i class="fas fa-info"></i>
+                        </button>
+                        <div ngbDropdownMenu aria-labelledby="activityCount">
+                            <button ngbDropdownItem class="task-font"><i class="fas fa-tasks"></i> Task :
+                                {{cell.activityCountDto?.taskCount}}</button>
+                            <button ngbDropdownItem class="Issue-font"><i class="fas fa-bug"></i>Issue :
+                                {{cell.activityCountDto?.issueCount}}</button>
+                            <button ngbDropdownItem class="Meeting-font"><i class="fas fa-handshake"></i> Meeting :
+                                {{cell.activityCountDto?.meetingCount}}</button>
+                        </div>
+                    </div> -->
+
+          <!-- <div ngbDropdown class="d-inline-block">
+                        <button class="btn btn dropdown-outline-ellipsis-icon" id="activityType1" ngbDropdownToggle
+                            ngbTooltip="Add">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                        <div ngbDropdownMenu aria-labelledby="activityType1">
+                            <button ngbDropdownItem
+                                (click)="openPopupIssueAndTask(cell,activityType.Task,cell.activityCountDto)">Task</button>
+                            <button ngbDropdownItem
+                                (click)="openPopupIssueAndTask(cell,activityType.Issue,cell.activityCountDto)">Issue</button>
+                            <button ngbDropdownItem
+                                (click)="openPopupMeeting(cell,activityType.Meeting, cell.activityCountDto)">Meeting</button>
+                        </div>
+                    </div> -->
+
+          <div ngbDropdown class="d-inline-block" style="width: 25px">
+            <button
+              class="btn btn-outline-primary dropdown-outline-ellipsis-icon"
+              id="columnStructure1"
+              ngbDropdownToggle
+            >
+              <i class="fas fa-angle-down"></i>
+            </button>
+            <div
+              class="extra-submenu"
+              ngbDropdownMenu
+              aria-labelledby="columnStructure1"
+            >
+              <div class="submenu-item">
+                <div ngbDropdown class="d-inline-block">
+                  <button
+                    class="btn btn-right-arrow"
+                    id="activityCount"
+                    ngbDropdownToggle
+                  >
+                    <span class="dropdown-icon">
+                      <i class="fas fa-info"></i>
+                    </span>
+                    <span>Info</span>
+                  </button>
+                  <div
+                    ngbDropdownMenu
+                    aria-labelledby="activityCount"
+                    class="sub-menu-items"
+                  >
+                    <!-- <button class="submenu-item" ngbDropdownItem>Read
+                                  From
+                                  Pivot</button> -->
+                    <button ngbDropdownItem class="task-font submenu-item">
+                      <i class="fas fa-tasks"></i> Task :
+                      {{ cell.activityCountDto?.taskCount }}
+                    </button>
+                    <button ngbDropdownItem class="Issue-font submenu-item">
+                      <i class="fas fa-bug"></i>Issue :
+                      {{ cell.activityCountDto?.issueCount }}
+                    </button>
+                    <button ngbDropdownItem class="Meeting-font submenu-item">
+                      <i class="fas fa-handshake"></i> Meeting :
+                      {{ cell.activityCountDto?.meetingCount }}
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="submenu-item">
+                <div ngbDropdown class="d-inline-block">
+                  <button
+                    class="btn btn-right-arrow"
+                    id="activityType1"
+                    ngbDropdownToggle
+                  >
+                    <span class="dropdown-icon">
+                      <i class="fas fa-plus"></i>
+                    </span>
+                    <span> ADD </span>
+                  </button>
+                  <div
+                    ngbDropdownMenu
+                    aria-labelledby="activityType1"
+                    class="sub-menu-items"
+                  >
+                    <!-- <button class="submenu-item" ngbDropdownItem>Read
+                                  From
+                                  Pivot</button> -->
+                    <button
+                      ngbDropdownItem
+                      class="submenu-item"
+                      (click)="
+                        openPopupIssueAndTask(
+                          cell,
+                          activityType.Task,
+                          cell.activityCountDto
+                        )
+                      "
+                    >
+                      Task
+                    </button>
+                    <button
+                      ngbDropdownItem
+                      class="submenu-item"
+                      (click)="
+                        openPopupIssueAndTask(
+                          cell,
+                          activityType.Issue,
+                          cell.activityCountDto
+                        )
+                      "
+                    >
+                      Issue
+                    </button>
+                    <button
+                      ngbDropdownItem
+                      class="submenu-item"
+                      (click)="
+                        openPopupMeeting(
+                          cell,
+                          activityType.Meeting,
+                          cell.activityCountDto
+                        )
+                      "
+                    >
+                      Meeting
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </td>
+  </ng-container>
+</ng-container>
+<ng-container
+  *ngIf="
+    structureTypeId == structureType.DynamicDimension &&
+    !dimensionData.dynamicTitle
+  "
+>
+  <a href="javascript:;" (click)="addDynamicDim()" class="ng-star-inserted"
+    ><i class="fa fa-plus-circle"></i>&nbsp; Add Dynamic</a
+  >
+</ng-container>

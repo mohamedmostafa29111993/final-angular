@@ -1,0 +1,92 @@
+<ng-container *ngIf="isLoaded">
+  <ng-container *ngFor="let kpi of subsection.kpis">
+    <!-- start coding -By Meska- -->
+    <tr class="form-data-body-kpi-title">
+      <th colspan="13" class="align-middle dimension-title">
+        <div class="d-flex align-items-center">
+          <span class="mr-1">
+            {{ kpi.title }}
+          </span>
+        </div>
+      </th>
+    </tr>
+    <!-- end coding -By Meska- -->
+    <tr
+      app-form-data-row
+      [Month]="Month"
+      [Weeks]="Weeks"
+      [Year]="Year"
+      [structureTypeId]="structureType.KPI"
+      [kpi]="kpi"
+      [columns]="subsection.columns"
+      (updateAffectedRows)="updateAffectedRows($event)"
+      class="measure"
+    ></tr>
+    <!--weeks on kpi level-->
+    <ng-container *ngIf="kpi.dimensionWeeks?.length > 0">
+      <ng-container *ngFor="let week of kpi.dimensionWeeks; let last = last">
+        <tr
+          app-form-data-row
+          [formId]="formId"
+          [Month]="Month"
+          [Weeks]="Weeks"
+          [Year]="Year"
+          [businessUnitId]="businessUnitId"
+          [kpi]="kpi"
+          [structureTypeId]="structureType.DimensionWeek"
+          [perentKpiId]="kpi.id"
+          [perentDimensionDataId]="0"
+          [dimensionWeek]="week"
+          [columns]="subsection.columns"
+          (updateAffectedRows)="updateAffectedRows($event)"
+          class="dimension form-data-body-kpi-dimension-week"
+          [ngClass]="{ 'form-data-body-kpi-dimension-week-last-child': last }"
+        ></tr>
+      </ng-container>
+    </ng-container>
+    <!-------------------->
+    <ng-container *ngIf="kpi.dimensions?.length > 0">
+      <ng-container *ngFor="let dimension of kpi.dimensions; let last = last">
+        <tr
+          app-form-data-row
+          [formId]="formId"
+          [Month]="Month"
+          [Weeks]="Weeks"
+          [Year]="Year"
+          [businessUnitId]="businessUnitId"
+          [kpi]="kpi"
+          [structureTypeId]="structureType.DimensionData"
+          [perentKpiId]="kpi.id"
+          [dimensionData]="dimension"
+          [columns]="subsection.columns"
+          (updateAffectedRows)="updateAffectedRows($event)"
+          class="dimension form-data-body-data-dimension"
+          [ngClass]="{ 'form-data-body-data-dimension-last-child': last }"
+        ></tr>
+        <ng-container
+          *ngFor="let week of dimension.dimensionWeeks; let last = last"
+        >
+          <tr
+            app-form-data-row
+            [formId]="formId"
+            [Month]="Month"
+            [Weeks]="Weeks"
+            [Year]="Year"
+            [businessUnitId]="businessUnitId"
+            [kpi]="kpi"
+            [structureTypeId]="structureType.DimensionWeek"
+            [perentKpiId]="kpi.id"
+            [perentDimensionDataId]="dimension.id"
+            [dimensionWeek]="week"
+            [columns]="subsection.columns"
+            (updateAffectedRows)="updateAffectedRows($event)"
+            class="dimension form-data-body-data-dimension-week"
+            [ngClass]="{
+              'form-data-body-data-dimension-week-last-child': last
+            }"
+          ></tr>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+</ng-container>

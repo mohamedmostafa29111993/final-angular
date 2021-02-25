@@ -1,0 +1,376 @@
+<td class="second-section indicator-cell">
+  <div class="d-flex flex-nowrap align-items-center justify-content-between">
+    <div class="">
+      <span class="dropdown-lf">
+        <i
+          (click)="deleteKPI(this.formIndicator.id)"
+          class="fa fa-trash dropbtn"
+        ></i>
+      </span>
+    </div>
+    <div class="w-100">
+      <div class="tdbox">
+        <span class="icons-title" *ngIf="formIndicator?.title">
+          {{ this.formIndicator?.title }}
+        </span>
+        <span *ngIf="!formIndicator?.title" class="tdbox"> No Title </span>
+
+        <div
+          *ngIf="
+            !formIndicator?.referenceId &&
+            !(
+              formIndicator?.referenceDimensionKpiSum ||
+              formIndicator?.referenceData
+            )
+          "
+          class="icons-container"
+        >
+          <div class="items-alignment">
+            <i
+              *ngIf="
+                formIndicator?.weeks?.length &&
+                !formIndicator?.dimensions?.length
+              "
+              class="fas fa-calculator dropbtn dropdown CellWithTooltip cursor-pointer"
+              (click)="openSumPopup()"
+            >
+              <ng-container
+                ><span class="TooltipSpan">sum KPIs</span>
+              </ng-container>
+            </i>
+            <span class="dropdown">
+              <a class="dropbtn">
+                <i class="fa fa-plus-circle fa-dimention CellWithTooltip">
+                  <ng-container *ngIf="isSummary"
+                    ><span class="TooltipSpan"
+                      >Can't Add Dimention Due to KPI Type</span
+                    >
+                  </ng-container>
+                </i>
+              </a>
+              <span class="dropdown-content" *ngIf="!isSummary && !isDynamic">
+                <a
+                  href="javascript:;"
+                  (click)="openDimensionDialog(formIndicator)"
+                  ><i
+                    [ngStyle]="{
+                      color: IsContainDimensionType() ? '#a6acad' : '#0cb5cb'
+                    }"
+                    class="fa fa-plus-circle"
+                  ></i
+                  >&nbsp; Add Dimension
+                </a>
+                <!---->
+                <a href="javascript:;" (click)="openDimensionTypesDialog()"
+                  ><i
+                    class="fa fa-plus-circle"
+                    [ngStyle]="{
+                      color:
+                        IsContainDimensionType() ||
+                        IsContainDimensionOrDimensionWeek()
+                          ? '#a6acad'
+                          : '#0cb5cb'
+                    }"
+                  ></i
+                  >&nbsp; Add Dimension Type</a
+                >
+                <a href="javascript:;" (click)="addWeekDimension()"
+                  ><i
+                    class="fa fa-plus-circle"
+                    [ngStyle]="{
+                      color: IsContainDimensionType() ? '#a6acad' : '#0cb5cb'
+                    }"
+                  ></i
+                  >&nbsp; Add Week Dimension</a
+                >
+                <a
+                  href="javascript:;"
+                  *ngIf="canAddDynamicDim"
+                  (click)="addDynamicDimension()"
+                  ><i class="fa fa-plus-circle"></i>&nbsp; Add Dynamic
+                  Dimension</a
+                >
+                <a
+                  href="javascript:;"
+                  (click)="
+                    copyKpiAsDimension.emit({
+                      title: 'Copy Kpis',
+                      type: 'CopyAsDimension',
+                      parentId: formIndicator?.id,
+                      percentages: formIndicator?.struturePercentages,
+                      FormStructure: form
+                    })
+                  "
+                  ><i class="fa fa-copy"></i>&nbsp; Copy KPI as Dimension</a
+                >
+              </span>
+            </span>
+
+            <i
+              *ngIf="formIndicator.code"
+              class="fa fa-info-circle dropbtn dropdown CellWithTooltip"
+            >
+              <ng-container
+                ><span class="TooltipSpan">{{ formIndicator?.code }}</span>
+              </ng-container>
+            </i>
+
+            <i
+              *ngIf="!formIndicator?.code"
+              class="fa fa-info-circle dropbtn dropdown CellWithTooltip"
+            >
+              <ng-container
+                ><span class="TooltipSpan">no kpi code</span>
+              </ng-container>
+            </i>
+
+            <!--start sub menu -->
+
+            <!-- <div ngbDropdown class="d-inline-block dropdown-container">
+                            <button class="btn btn-outline-primary dropdown-outline-ellipsis-icon" id="" ngbDropdownToggle>
+                                <i class="fas fa-angle-down"></i>
+                            </button>
+
+                            <div class="extra-submenu" ngbDropdownMenu aria-labelledby="">
+
+                                <div class="submenu-item">
+                                    <div ngbDropdown class="d-inline-block">
+                                        <button class="btn btn-right-arrow" id="" ngbDropdownToggle>
+                                            Data Source
+                                        </button>
+                                        <div ngbDropdownMenu aria-labelledby="" class="sub-menu-items">
+                                            <button class="submenu-item" ngbDropdownItem>Read
+                                                From
+                                                Pivot</button>
+                                            <button class="submenu-item" ngbDropdownItem>Read
+                                                From
+                                                other
+                                                Form</button>
+                                            <button class="submenu-item" ngbDropdownItem>Build
+                                                equation</button>
+                                            <button class="submenu-item" ngbDropdownItem>Build
+                                                Pivot</button>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="submenu-item">
+
+                                    <button ngbDropdownItem class="submenu-item">
+                                        Delete
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+
+                                </div>
+
+                            </div>
+                        </div> -->
+          </div>
+        </div>
+      </div>
+      <a href="javascript:;" *ngIf="isDynamic"
+        ><i
+          [ngStyle]="{
+            color: IsContainDimensionType() ? '#a6acad' : '#0cb5cb'
+          }"
+          class="fa fa-plus-circle"
+        ></i
+        >&nbsp; Add Dynamic Dimension</a
+      >
+
+      <!-- end submenu -->
+    </div>
+  </div>
+</td>
+
+<td class="second-section td-lg-td indicator-cell">
+  <div
+    class="d-flex pb-2"
+    *ngIf="
+      !formIndicator?.referenceId &&
+      !(formIndicator?.referenceDimensionKpiSum || formIndicator?.referenceData)
+    "
+  >
+    <div class="title-of-toggle details-toggle">
+      <div class="d-flex">
+        <div class="CellWithTooltip">
+          <label> Type: </label>
+          <ui-switch
+            name="isSummary"
+            size="small"
+            color="rgb(0, 189, 99)"
+            switchColor="#fff"
+            defaultBgColor="#3c8dbc"
+            defaultBoColor="#3c8dbc"
+            checkedTextColor="#fff"
+            uncheckedTextColor="#fff"
+            (ngModelChange)="isSummaryEvent($event)"
+            [ngModel]="isSummary"
+            [disabled]="!isSummary && getdisabledSummary()"
+            (change)="ngOnChanges($event)"
+          >
+            <span>{{ isSummary | json }}</span>
+          </ui-switch>
+        </div>
+      </div>
+    </div>
+    <div class="title-of-toggle show-toggle">
+      <div class="d-flex">
+        <div class="CellWithTooltip">
+          <label> Total: </label>
+          <ui-switch
+            name="total"
+            size="small"
+            color="rgb(0, 189, 99)"
+            switchColor="#fff"
+            defaultBgColor="#3c8dbc"
+            defaultBoColor="#3c8dbc"
+            checkedTextColor="#fff"
+            uncheckedTextColor="#fff"
+            [ngModel]="showValues"
+            (ngModelChange)="showValuesEvent($event)"
+          >
+            <span>
+              {{ showValues | json }}
+            </span>
+          </ui-switch>
+        </div>
+      </div>
+    </div>
+    <div>
+      <button
+        mat-button
+        [matMenuTriggerFor]="menuEquationKpi"
+        ngbTooltip="Equation Type"
+      >
+        <i class="fas fa-angle-down"></i>
+      </button>
+      <mat-menu #menuEquationKpi="matMenu">
+        <mat-radio-group
+          [(ngModel)]="formIndicator.equationTypeId"
+          aria-labelledby="example-radio-group-label"
+          class="example-radio-group"
+          (change)="equationTypeChange($event)"
+        >
+          <mat-radio-button
+            class="example-margin w-100 d-block px-3"
+            *ngFor="let equation of equationTypes"
+            [value]="equation.id"
+            >{{ equation.type }}
+          </mat-radio-button>
+        </mat-radio-group>
+      </mat-menu>
+    </div>
+    <i class="fa fa-info-circle dropbtn CellWithTooltip mx-1">
+      <ng-container><span class="TooltipSpan">Summary Row</span> </ng-container>
+    </i>
+
+    <!-- <div *ngIf="isSummary">
+            <button (click)="addWeekDimensionForKpiDistribution() " ngbTooltip="Distribution" class="btn p-0 btn-distr">
+                <i class="fas fa-sitemap"></i>
+            </button>
+        </div> -->
+
+    <!-- <div>
+            <button mat-button [matMenuTriggerFor]="menu" ngbTooltip="Distribution">
+                <i class="fas fa-angle-down"></i>
+
+            </button>
+            <mat-menu #menu="matMenu">
+                <mat-checkbox class="example-margin w-100 d-block px-3">Check me!</mat-checkbox>
+
+                <mat-checkbox class="example-margin w-100 d-block px-3">Check me!</mat-checkbox>
+
+            </mat-menu>
+        </div> -->
+  </div>
+</td>
+<ng-container *ngFor="let column of formColumns; let i = index">
+  <td class="tdborder indicator-cell">
+    <ng-container *ngIf="isSummary && !formIndicator.cells[i].isDeleted">
+      <div ngbDropdown class="d-inline-block">
+        <button
+          [disabled]="
+            formIndicator?.referenceId ||
+            formIndicator?.referenceDimensionKpiSum ||
+            formIndicator?.referenceData
+          "
+          class="btn dropdown-outline-ellipsis-text"
+          id="getCellTypeName"
+          ngbDropdownToggle
+        >
+          <!-- {{getCellTypeName(formIndicator.cells[i].typeId)}} -->
+          <i
+            class="fas fa-circle"
+            [ngClass]="{
+              'text-warning':
+                getCellTypeName(
+                  formDesignerService.getTypeId(
+                    formIndicator?.cells,
+                    column.bindSource
+                  ).typeId
+                ) == 'User Input',
+              'text-success':
+                getCellTypeName(
+                  formDesignerService.getTypeId(
+                    formIndicator?.cells,
+                    column.bindSource
+                  ).typeId
+                ) == 'Calculated',
+              'text-primary':
+                getCellTypeName(
+                  formDesignerService.getTypeId(
+                    formIndicator?.cells,
+                    column.bindSource
+                  ).typeId
+                ) === 'Data soruce'
+            }"
+          ></i>
+          {{
+            getCellTypeName(
+              formDesignerService.getTypeId(
+                formIndicator.cells,
+                column.bindSource
+              ).typeId
+            )
+          }}
+          <i class="fas fa-angle-down"></i>
+        </button>
+        <div ngbDropdownMenu aria-labelledby="getCellTypeName">
+          <button
+            [disabled]="
+              formIndicator?.referenceId ||
+              formIndicator?.referenceDimensionKpiSum ||
+              formIndicator?.referenceData
+            "
+            ngbDropdownItem
+            *ngFor="let type of cellTypes"
+            (click)="
+              assignCellType(
+                type.id,
+                i,
+                formDesignerService.getTypeId(
+                  formIndicator.cells,
+                  column.bindSource
+                )
+              )
+            "
+            class="task-font"
+          >
+            <i
+              class="fas fa-circle"
+              [ngClass]="{
+                'text-warning': type.type == 'User Input',
+                'text-success': type.type == 'Calculated',
+                'text-primary': type.type == 'Data soruce'
+              }"
+            ></i>
+            {{ type.type }}
+          </button>
+        </div>
+      </div>
+    </ng-container>
+  </td>
+</ng-container>

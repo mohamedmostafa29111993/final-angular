@@ -1,0 +1,533 @@
+<!-- <h5 *ngIf="isLoading" class="loader-icon">
+    <img class="logo-loader" src="../../../assets/img/logo.png" alt="">
+    <img src="../../../assets/img/custom-loader.gif" alt="">
+</h5> -->
+<div class="card card-right">
+  <!-- [busy]="isLoading" -->
+  <div class="card-body p-0">
+    <div class="container-fluid">
+      <div class="d-flex justify-content-end mb-3">
+        <a
+          href="javascript:;"
+          class="btn general-btn light-blue-bg mx-1"
+          id="openMeasurePopup"
+          (click)="openCopyKpisModal()"
+        >
+          <i class="fa fa-copy pr-2"></i> {{ "Copy KPI" }}
+        </a>
+        <a
+          href="javascript:;"
+          class="btn general-btn light-blue-bg"
+          id="openMeasurePopup"
+          [class.disabled]="DisableAddMeasure"
+          (click)="openPopupMeasure()"
+        >
+          <i class="fa fa-plus-circle pr-2"></i> {{ "Add Measure" }}
+        </a>
+        &nbsp;
+        <a
+          href="javascript:;"
+          class="btn general-btn light-blue-bg"
+          [class.disabled]="formDesignerStructure?.id == 0"
+          (click)="openPivotDialog()"
+        >
+          <i class="fa fa-plus-circle pr-2"></i> {{ "Add Data Source" }}
+        </a>
+      </div>
+      <div class="row mb-2">
+        <div class="col-12">
+          <div class="custom-table-dimension">
+            <table class="table align-middle text-nowrap">
+              <thead>
+                <tr
+                  cdkDropList
+                  cdkDropListOrientation="horizontal"
+                  [cdkDropListData]="formDesignerStructure?.columns"
+                  (cdkDragReleased)="release = true"
+                  (cdkDropListDropped)="dropCol($event)"
+                >
+                  <th scope="col">{{ "Measure" }}</th>
+                  <th scope="col">{{ "Row Options" }}</th>
+                  <ng-container
+                    *ngFor="
+                      let item of formDesignerStructure?.columns;
+                      let i = index
+                    "
+                  >
+                    <th
+                      class="drag cursor-move"
+                      scope="col"
+                      *ngIf="!item.isDeleted"
+                      cdkDrag
+                      (mousedown)="mouseDown($event)"
+                      cdkDragLockAxis="x"
+                      (cdkDragReleased)="release = true"
+                    >
+                      <div
+                        class="example-custom-placeholder"
+                        *cdkDragPlaceholder
+                      ></div>
+                      <div class="thead-wrapper">
+                        <span class="input-order">
+                          {{ item.order }}
+                        </span>
+                        <span class="column-title">
+                          {{ item.header }}
+                        </span>
+                        <div ngbDropdown class="d-inline-block">
+                          <button
+                            class="btn btn-outline-primary dropdown-outline-ellipsis-icon"
+                            id="columnStructure1"
+                            ngbDropdownToggle
+                          >
+                            <i class="fas fa-angle-down"></i>
+                          </button>
+
+                          <div
+                            class="extra-submenu"
+                            ngbDropdownMenu
+                            aria-labelledby="columnStructure1"
+                          >
+                            <div class="submenu-item">
+                              <button
+                                ngbDropdownItem
+                                (click)="DeleteMeasure(item.columnStructureId)"
+                                class="submenu-item"
+                              >
+                                Delete
+                                <i class="fa fa-trash"></i>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div *cdkDragPreview>
+                        <div
+                          class="d-flex justify-content-between"
+                          [style.border]="'1px solid #eee'"
+                          [style.backgroundColor]="'#fff'"
+                          [style.width.px]="160"
+                          [style.margin-top]="pos?.y"
+                          [style.margin-left]="pos?.x"
+                        >
+                          <thead>
+                            <tr>
+                              <th>
+                                <div
+                                  class="thead-wrapper d-flex justify-content-between w-100"
+                                >
+                                  <span class="input-order" style="width: 25px">
+                                    {{ item.order }}
+                                  </span>
+                                  <span
+                                    style="margin: 0 50px !important"
+                                    class="column-title"
+                                  >
+                                    {{ item.header }}
+                                  </span>
+                                  <div
+                                    ngbDropdown
+                                    class="d-inline-block"
+                                    style="width: 25px"
+                                  >
+                                    <button
+                                      class="btn btn-outline-primary dropdown-outline-ellipsis-icon"
+                                      id="columnStructure1"
+                                      ngbDropdownToggle
+                                    >
+                                      <i class="fas fa-angle-down"></i>
+                                    </button>
+                                    <div
+                                      class="extra-submenu"
+                                      ngbDropdownMenu
+                                      aria-labelledby="columnStructure1"
+                                    >
+                                      <div class="submenu-item">
+                                        <div ngbDropdown class="d-inline-block">
+                                          <button
+                                            class="btn btn-right-arrow"
+                                            id="222"
+                                            ngbDropdownToggle
+                                          >
+                                            Data Source
+                                          </button>
+                                          <div
+                                            ngbDropdownMenu
+                                            aria-labelledby="222"
+                                            class="sub-menu-items"
+                                          >
+                                            <button
+                                              class="submenu-item"
+                                              ngbDropdownItem
+                                            >
+                                              Read From Pivot
+                                            </button>
+                                            <button
+                                              class="submenu-item"
+                                              ngbDropdownItem
+                                            >
+                                              Read From other Form
+                                            </button>
+                                            <button
+                                              class="submenu-item"
+                                              ngbDropdownItem
+                                            >
+                                              Build equation
+                                            </button>
+                                            <button
+                                              class="submenu-item"
+                                              ngbDropdownItem
+                                            >
+                                              Build Pivot
+                                            </button>
+                                          </div>
+                                        </div>
+                                      </div>
+
+                                      <div class="submenu-item">
+                                        <button
+                                          ngbDropdownItem
+                                          (click)="
+                                            DeleteMeasure(
+                                              item.columnStructureId
+                                            )
+                                          "
+                                          class="submenu-item"
+                                        >
+                                          Delete
+                                          <i class="fa fa-trash"></i>
+                                        </button>
+                                      </div>
+
+                                      <div
+                                        class="submenu-item toggle-dropdown-submenu"
+                                      >
+                                        <div ngbDropdown class="d-inline-block">
+                                          <div
+                                            class="submenu-item select-type-submenu"
+                                            id="333"
+                                            ngbDropdownToggle
+                                          >
+                                            <p>Select type</p>
+                                            <div class="toggle-content">
+                                              <div>
+                                                <ui-switch
+                                                  [(ngModel)]="
+                                                    item.isPercentage
+                                                  "
+                                                >
+                                                </ui-switch>
+                                                <p *ngIf="item.isPercentage">
+                                                  Percentage
+                                                </p>
+                                                <p *ngIf="!item.isPercentage">
+                                                  f Normal Number
+                                                </p>
+                                              </div>
+                                            </div>
+                                          </div>
+                                          <!-- <div ngbDropdownMenu aria-labelledby="333"
+                                                                                    class="sub-menu-items">
+                                                                                    <button class="submenu-item" ngbDropdownItem>item</button>
+                                                                                    <button class="submenu-item" ngbDropdownItem>item</button>
+                                                                                    <div class="submenu-item" ngbDropdownItem>
+
+                                                                                    </div>
+                                                                                </div> -->
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </th>
+                            </tr>
+                          </thead>
+                        </div>
+                      </div>
+                      <div class="placeholder" *cdkDragPlaceholder></div>
+                    </th>
+                  </ng-container>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container
+                  *ngFor="
+                    let indicator of formDesignerStructure?.kpis;
+                    let kpiIndex = index
+                  "
+                >
+                  <tr
+                    (mouseout)="targetIndex = null; animationState = 'closed'"
+                    (mouseover)="showMeasaureRow(kpiIndex)"
+                    [@animateRow]="targetIndex === kpiIndex ? 'open' : 'closed'"
+                    class="second-thead"
+                    *ngIf="!indicator.isDeleted"
+                  >
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                    <ng-container
+                      *ngFor="let item of indicator?.columns; let i = index"
+                    >
+                      <th
+                        [class.highlight-cell]="
+                          item | filteration: unmatchedDataSource():indicator.id
+                        "
+                        [class.d-none]="targetIndex === kpiIndex ? false : true"
+                        scope="col"
+                        *ngIf="!item.isDeleted"
+                      >
+                        <div class="thead-wrapper">
+                          <span class="input-order">
+                            {{ item.order }}
+                          </span>
+                          <span class="column-title">
+                            {{ item.header }}
+                          </span>
+                          <span
+                            *ngIf="checkColMpped(indicator, item)"
+                            ngbTooltip="Mapped to Data Source"
+                          >
+                            <i class="fas fa-link"></i>
+                          </span>
+
+                          <div ngbDropdown class="d-inline-block">
+                            <button
+                              class="btn btn-outline-primary dropdown-outline-ellipsis-icon"
+                              id="columnStructure1"
+                              ngbDropdownToggle
+                            >
+                              <i class="fas fa-angle-down"></i>
+                            </button>
+
+                            <div
+                              class="extra-submenu"
+                              ngbDropdownMenu
+                              aria-labelledby="columnStructure1"
+                            >
+                              <div class="submenu-item">
+                                <div ngbDropdown class="d-inline-block">
+                                  <button
+                                    class="btn btn-right-arrow"
+                                    id="222"
+                                    ngbDropdownToggle
+                                  >
+                                    Data Source
+                                  </button>
+                                  <div
+                                    ngbDropdownMenu
+                                    aria-labelledby="222"
+                                    class="sub-menu-items"
+                                  >
+                                    <div class="submenu-item sub-data">
+                                      <button
+                                        class="btn btn-right-arrow position-relative"
+                                        id="form-pivot-measure"
+                                        ngbDropdownToggle
+                                        [class.disabled]="
+                                          item.id <= 0 || indicator.id <= 0
+                                        "
+                                      >
+                                        Read From Pivot
+                                      </button>
+                                      <column-measure
+                                        [pivot]="pivotConfigration"
+                                        [columnn]="item"
+                                        [kpi]="indicator"
+                                      >
+                                      </column-measure>
+                                    </div>
+
+                                    <button
+                                      class="submenu-item"
+                                      ngbDropdownItem
+                                    >
+                                      Read From other Form
+                                    </button>
+                                    <button
+                                      class="submenu-item"
+                                      ngbDropdownItem
+                                    >
+                                      Build equation
+                                    </button>
+                                    <button
+                                      class="submenu-item"
+                                      ngbDropdownItem
+                                    >
+                                      Build Pivot
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="submenu-item toggle-dropdown-submenu">
+                                <div ngbDropdown class="d-inline-block">
+                                  <div
+                                    class="submenu-item select-type-submenu"
+                                    id="333"
+                                    ngbDropdownToggle
+                                  >
+                                    <p>Select type</p>
+                                    <div class="toggle-content">
+                                      <div>
+                                        <ui-switch
+                                          [(ngModel)]="item.isPercentage"
+                                          (change)="
+                                            changeIsPercentage(
+                                              $event,
+                                              item,
+                                              indicator
+                                            )
+                                          "
+                                        >
+                                        </ui-switch>
+                                        <p *ngIf="item.isPercentage">
+                                          Percentage
+                                        </p>
+                                        <p *ngIf="!item.isPercentage">
+                                          Normal Number
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </th>
+                    </ng-container>
+                  </tr>
+
+                  <tr
+                    #tr
+                    ng-mouseover="showMeasaureRow(kpiIndex, $event);"
+                    (mouseout)="targetIndex = null; animationState = 'closed'"
+                    (mouseover)="showMeasaureRow(kpiIndex)"
+                    (cdkDragReleased)="onDragRelease($event)"
+                    *ngIf="!indicator.isDeleted"
+                    app-form-design-kpi
+                    [formDisplayType]="formDesignerStructure.formDisplayTypeId"
+                    (deleteKPIid)="deleteKPI(kpiIndex)"
+                    (selectedDimentionForBody)="addDimentions($event)"
+                    (selectedIndicator)="selectedIndicator($event)"
+                    [formIndicator]="indicator"
+                    [formColumns]="formDesignerStructure?.columns"
+                    [indicatorIndex]="kpiIndex"
+                    [weekDimensionStructureId]="weekDimensionStructureId"
+                    [cellTypes]="cellTypes"
+                    (copyKpiAsDimension)="
+                      openCopyKpisModal(
+                        $event.title,
+                        $event.type,
+                        $event.parentId,
+                        $event.percentages
+                      )
+                    "
+                    [form]="formDesignerStructure"
+                    [selectedEquationTypeId]="selectedEquationTypeId"
+                    (changedEquationTypeId)="
+                      changedEquationType($event, indicator)
+                    "
+                    [isDynamic]="isDynamic"
+                    [canAddDynamicDim]="canAddDynamicDim"
+                    (SelectedDimentionType)="addDimentionSample($event)"
+                  ></tr>
+
+                  <ng-container
+                    *ngFor="
+                      let formRow of indicator?.weeks;
+                      let dimensionWeekIndex = index
+                    "
+                  >
+                    <tr
+                      [formIndicator]="indicator"
+                      #tr
+                      (cdkDragReleased)="onDragRelease($event)"
+                      app-form-designer-row
+                      *ngIf="!formRow.isDeleted"
+                      [formColumns]="formDesignerStructure?.columns"
+                      [cellTypes]="cellTypes"
+                      [formRow]="formRow"
+                      [kpiIndex]="kpiIndex"
+                      [index]="dimensionWeekIndex"
+                      (deleteWeekDimension)="
+                        openDeleteWeekDimentionPopup($event)
+                      "
+                      (mouseout)="targetIndex = null; animationState = 'closed'"
+                      (mouseover)="showMeasaureRow(kpiIndex)"
+                    ></tr>
+                  </ng-container>
+
+                  <ng-container
+                    *ngFor="
+                      let dimension of indicator?.dimensions;
+                      let dimensionDataIndex = index
+                    "
+                  >
+                    <tr
+                      [formIndicator]="indicator"
+                      #tr
+                      (cdkDragReleased)="onDragRelease($event)"
+                      app-form-design-dimension
+                      *ngIf="!dimension.isDeleted"
+                      [formDisplayType]="
+                        formDesignerStructure.formDisplayTypeId
+                      "
+                      [formColumns]="formDesignerStructure?.columns"
+                      [formDimension]="dimension"
+                      [kpiIndex]="kpiIndex"
+                      [dimensionDataIndex]="dimensionDataIndex"
+                      [weekDimensionStructureId]="weekDimensionStructureId"
+                      [cellTypes]="cellTypes"
+                      (deleteDimensionData)="OpenDeleteDimensionDialog($event)"
+                      [dimensionsHierarchy]="dimensionsHierarchy"
+                      [form]="formDesignerStructure"
+                      [selectedEquationTypeIdDimension]="
+                        selectedEquationTypeIdDimension
+                      "
+                      (changedEquationTypeIdDimension)="
+                        changedEquationTypeDimension($event, indicator)
+                      "
+                    ></tr>
+                    <ng-container
+                      *ngFor="
+                        let formRow of dimension.dimensionWeeks;
+                        let dimensionWeekIndex = index
+                      "
+                    >
+                      <tr
+                        #tr
+                        (cdkDragReleased)="onDragRelease($event)"
+                        app-form-designer-row
+                        *ngIf="!formRow.isDeleted"
+                        [formColumns]="formDesignerStructure?.columns"
+                        [cellTypes]="cellTypes"
+                        [formRow]="formRow"
+                        [kpiIndex]="kpiIndex"
+                        [dimensionDataIndex]="dimensionDataIndex"
+                        [index]="dimensionWeekIndex"
+                        (deleteWeekDimension)="
+                          openDeleteWeekDimentionPopup($event)
+                        "
+                        [formIndicator]="indicator"
+                        [formDimension]="dimension"
+                      ></tr>
+                    </ng-container>
+                  </ng-container>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <a
+        href="javascript:;"
+        class="btn general-btn light-blue-bg"
+        id="openPopup"
+        (click)="openPopupKPI()"
+      >
+        <i class="fa fa-plus-circle pr-2"></i> {{ "Add KPI" }}
+      </a>
+    </div>
+  </div>
+</div>

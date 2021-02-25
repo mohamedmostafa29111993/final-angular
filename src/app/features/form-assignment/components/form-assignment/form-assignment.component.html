@@ -1,0 +1,268 @@
+<div>
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-6">
+          <h1 class="page-title">{{ "Forms Assignment" | localize }}</h1>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="content px-2">
+    <div class="container-fluid">
+      <div class="card">
+        <!-- filter section -->
+        <div class="card-header">
+          <div class="input-group">
+            <div class="input-group-append filter-direction">
+              <button type="button" class="btn" (click)="open_closeFilter()">
+                <span class="icon">
+                  <i class="fas fa-filter"></i>
+                </span>
+                <span class="btn-text">Filter</span>
+              </button>
+            </div>
+          </div>
+          <div *ngIf="advancedFiltersVisible" class="card mb-0 mt-1">
+            <div class="card-body body-padding p-0">
+              <form class="form-horizontal">
+                <div class="form-group mb-0">
+                  <div class="row">
+                    <div class="col-md-5">
+                      <label class="col-form-label">
+                        {{ "Form" | localize }}
+                      </label>
+                      <div>
+                        <ng-select
+                          [(ngModel)]="searchFormId"
+                          (keyup)="getFormslist($event.target.value)"
+                          name="drop_formId"
+                        >
+                          <ng-option
+                            *ngFor="let form of formsSearch"
+                            [value]="form.formId"
+                            >{{ form.formName }}
+                          </ng-option>
+                        </ng-select>
+                      </div>
+                    </div>
+                    <div class="col-md-5">
+                      <label class="col-form-label">
+                        {{ "User" | localize }}
+                      </label>
+
+                      <ng-select
+                        [(ngModel)]="searchUserId"
+                        (keyup)="getUserslist($event.target.value)"
+                        name="drop_userId"
+                      >
+                        <ng-option
+                          *ngFor="let user of usersSearch"
+                          [value]="user.userId"
+                          >{{ user.userName }}</ng-option
+                        >
+                      </ng-select>
+                    </div>
+                    <div class="col-md-2">
+                      <div
+                        class="d-flex justify-content-end align-items-end h-100"
+                      >
+                        <button
+                          type="button"
+                          class="btn bg-blue m-1"
+                          (click)="getSearchData()"
+                        >
+                          {{ "Search" | localize }}
+                        </button>
+                        <button
+                          type="button"
+                          class="btn btn-default float-right m-1"
+                          (click)="clearFilters()"
+                        >
+                          {{ "Clear" | localize }}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <!-- <div class="card-footer card-footer-padding">
+
+            </div> -->
+          </div>
+        </div>
+
+        <!-- end filter section -->
+        <div class="card-body table-responsive p-0">
+          <!-- creat new form Assignment section -->
+          <app-creat-form-assignment
+            (appendFormAssigment)="updateformUserGroupList($event)"
+          >
+          </app-creat-form-assignment>
+          <!-- end creat new form Assignment section -->
+
+          <!-- form Assignment list -->
+          <!-- [busy]="isFormsUsersLoading"  -->
+          <div
+            [style.height.px]="this.innerHeight"
+            class="search-results"
+            infinite-scroll
+            [infiniteScrollDistance]="2"
+            [infiniteScrollUpDistance]="2"
+            [infiniteScrollThrottle]="50"
+            (scrolled)="onScrollDown()"
+            [scrollWindow]="false"
+          >
+            <table
+              class="table table-hover remove-table-margin table-layout"
+              *ngIf="formUserGroup?.length > 0; else emptyData"
+            >
+              <thead class="">
+                <tr>
+                  <th colspan="4"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let form of formUserGroup">
+                  <td class="remove-padding" colspan="4">
+                    <table
+                      class="user-assignment-table table table-hover remove-table-margin table-layout"
+                    >
+                      <thead>
+                        <tr class="bg-color">
+                          <th colspan="4" scope="col">{{ form.formName }}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr
+                          class="user-forms-tr"
+                          *ngFor="let user of form.users"
+                        >
+                          <td align="left" valign="middle"></td>
+                          <td align="left" valign="middle">
+                            {{ user.userName }}
+                          </td>
+                          <td align="center" valign="middle">
+                            <ng-container
+                              *ngIf="
+                                formEditId === form.formId &&
+                                  userEditId === user.userId &&
+                                  formEditBusinessUnits.length > 0;
+                                then edit;
+                                else read
+                              "
+                            >
+                            </ng-container>
+                            <ng-template #read>
+                              <span
+                                class="bu-circle"
+                                *ngFor="let userForm of user.userForms"
+                                >{{ userForm.businessUnitSortName }}</span
+                              >
+                            </ng-template>
+                            <ng-template #edit>
+                              <ng-select
+                                [multiple]="true"
+                                required
+                                [(ngModel)]="userFormEditIds"
+                                name="BusinessUnit"
+                                (click)="checkBusinessUnitValue()"
+                                (change)="checkBusinessUnitValue()"
+                              >
+                                <ng-option
+                                  *ngFor="let bu of formEditBusinessUnits"
+                                  [value]="bu.businessUnitId"
+                                >
+                                  {{ bu.businessUnitTitle }}
+                                </ng-option>
+                              </ng-select>
+                              <span
+                                class="error invalid-feedback d-block span-sty"
+                                >{{ businessUniterrmsg }}</span
+                              >
+                            </ng-template>
+                          </td>
+                          <td align="left" valign="middle">
+                            <ng-container
+                              *ngIf="
+                                formEditId === form.formId &&
+                                  userEditId === user.userId &&
+                                  formEditBusinessUnits.length > 0;
+                                then editActions;
+                                else allActions
+                              "
+                            >
+                            </ng-container>
+                            <ng-template #allActions>
+                              <button
+                                type="button"
+                                class="btn btn-sm bg-secondary"
+                                (click)="
+                                  showUserAssignmentEdit(
+                                    form.formId,
+                                    user.userId
+                                  )
+                                "
+                              >
+                                <i class="fas fa-pencil-alt"></i>
+                              </button>
+                              <button
+                                type="button"
+                                class="btn btn-sm bg-danger mx-2"
+                                (click)="deleteUserForms(form, user)"
+                              >
+                                <i class="fas fa-trash"></i>
+                              </button>
+                            </ng-template>
+                            <ng-template #editActions>
+                              <button
+                                type="button"
+                                class="btn btn-sm bg-blue"
+                                (click)="editUserForms()"
+                              >
+                                {{ "Save" | localize }}
+                              </button>
+                              &nbsp;
+                              <button
+                                type="button"
+                                class="btn btn-sm bg-secondary"
+                                (click)="resetUserAssigmentEdit()"
+                              >
+                                {{ "Cancel" | localize }}
+                              </button>
+                            </ng-template>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <ng-template #emptyData>
+              <div *ngIf="!isFormsUsersLoading" class="card-footer border-top">
+                <div class="row">
+                  <div class="col-sm-12 col-12 text-center">
+                    <p class="mb-0 my-2 empty-style">No Data</p>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+            <div *ngIf="isFormsUsersLoading">
+              <div class="card-footer border-top">
+                <div class="row">
+                  <div class="col-sm-12 col-12 text-center">
+                    <p class="mb-0 my-2 empty-style">Loading...</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- end form Assignment list -->
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

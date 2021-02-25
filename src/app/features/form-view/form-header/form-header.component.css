@@ -1,0 +1,74 @@
+.DDL-style {
+    display: flex !important;
+    align-items: center !important;
+}
+
+.btn-styles {
+    text-align: end !important;
+}
+
+.btn-styles .btn {
+    padding: 8px 45px;
+}
+
+.dropdown-code {
+    padding-inline-start: 20px;
+}
+
+.filter-bar .card {
+    background-color: #fff;
+    border-radius: 0;
+}
+
+.filter-bar .card select {
+    white-space: pre-wrap;
+    font-size: 12px!important;
+    height: calc(2.25rem + 5px);
+    padding: .2rem .75rem;
+}
+
+.select-week-field,
+.select-month-field,
+.select-year-field {
+    position: relative;
+}
+
+.select-week-field:after,
+.select-month-field:after,
+.select-year-field:after {
+    content: '\f073';
+    font-family: "Font Awesome 5 Free";
+    position: absolute;
+    z-index: 0;
+    top: 50%;
+    color: #4c4c4c;
+    transform: translateY(-50%);
+    right: 34px;
+    pointer-events: none;
+}
+
+.select-week-field ng-select {
+    height: 100%;
+}
+
+.select-week-field ng-select .ng-select-container {
+    height: 100% !important;
+}
+
+@media (max-width:768px) {
+    .filter-bar .card .border-right {
+        border-right: 0px !important;
+    }
+    .filter-bar .card select {
+        margin-bottom: 10px;
+    }
+    .filter-bar .card select {
+        height: calc(2.2rem + 0px);
+    }
+    .select-week-field:after,
+    .select-month-field:after,
+    .select-year-field:after {
+        top: calc(50% - 10px);
+        transform: translateY(calc(-50% + 6px));
+    }
+}

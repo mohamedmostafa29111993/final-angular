@@ -1,0 +1,130 @@
+label.radio {
+  cursor: pointer;
+}
+
+label.radio input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+label.radio span {
+  padding: 7px 14px;
+  border: 2px solid #eee;
+  display: inline-block;
+  color: #009ba2;
+  border-radius: 3px;
+  text-transform: uppercase;
+}
+
+label.radio input:checked + span {
+  border-color: #009ba2;
+}
+
+.custom-checkbox {
+  position: relative;
+  width: 100%;
+  display: inline-flex;
+}
+
+.custom-checkbox input {
+  position: absolute;
+  left: 0;
+  opacity: 0;
+}
+
+.custom-checkbox span.checkbox-radio-custom-label {
+  position: relative;
+  padding-left: 22px;
+  cursor: pointer;
+  user-select: none;
+  display: inline-block;
+}
+
+.custom-checkbox > [type="radio"]:not(:checked) + span:before,
+.custom-checkbox > [type="radio"]:checked + span:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  margin-top: -9px;
+  width: 17px;
+  height: 17px;
+  border: 1px solid #6db6bf;
+  background: #ffffff;
+  border-radius: 2px;
+}
+
+.custom-checkbox > [type="radio"]:not(:checked) + span:after,
+.custom-checkbox > [type="radio"]:checked + span:after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  margin-top: -7px;
+  left: 2px;
+  color: #6db6bf;
+}
+
+.custom-checkbox > [type="radio"]:checked + span:after {
+  left: 6px;
+  top: 16px;
+  width: 5px;
+  height: 10px;
+  border: solid #6db6bf;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+.selected-measure {
+  background-color: #6db6bf;
+  color: #fff;
+  font-weight: bold;
+}
+.selected-measure:hover {
+  background-color: #6db6bf;
+}
+
+.pre-word {
+  white-space: pre-wrap;
+  position: relative;
+}
+.pre-word label {
+  position: static;
+}
+
+
+
+.custom-checkbox > [type="radio"]:not(:checked) + span:before,
+.custom-checkbox > [type="radio"]:checked + span:before {
+  content: "";
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  /* margin-top: -9px; */
+  width: 17px;
+  height: 17px;
+  border: 1px solid #6db6bf;
+  background: #ffffff;
+  border-radius: 2px;
+  transform: translateY(-50%);
+  /* bottom: 0; */
+  margin-top: -2px;
+  margin-left: -10px;
+}
+
+
+.custom-checkbox > [type="radio"]:checked + span:after {
+  left: 10px;
+  top: 58%;
+  width: 5px;
+  height: 10px;
+  border: solid #6db6bf;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg) translateY(-50%);
+  margin-left: -10px;
+  /* margin-top: -2px; */
+  padding-top: 9px;
+}

@@ -1,0 +1,25 @@
+.remove-table-margin{
+    margin: 0px;
+}
+.bg-color{
+    background-color: #dee2e6;
+}
+.bg-blue{
+    background-color: #17a2b8!important;
+}
+.td-vertical-align{
+    vertical-align: middle !important;
+}
+.table-layout{
+    table-layout: fixed;
+    margin-bottom: 0 !important;
+}
+.btn-save-location{
+    margin-left: 35px;
+}
+.action-location{
+    padding-left: 55px;
+}
+.td-middle{
+    text-align: center;
+  }

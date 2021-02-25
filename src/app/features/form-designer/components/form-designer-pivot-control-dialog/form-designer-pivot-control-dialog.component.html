@@ -1,0 +1,319 @@
+<form
+  class="form-horizontal form-designer-pivot-control-dialog-form"
+  autocomplete="off"
+  (ngSubmit)="save()"
+>
+  <abp-modal-header
+    title="Pivot Control"
+    (onCloseClick)="bsModalRef.hide()"
+  ></abp-modal-header>
+  <div class="modal-body">
+    <div class="container-fluid pivotTableBuilder" #pivotTableBuilder>
+      <div class="row">
+        <div class="col-lg-3 col-md-4">
+          <tabset>
+            <tab heading="Data" class="pt-3 px-2">
+              <div class="tab-pane active" role="tabpanel" id="data">
+                <br />
+                <div class="form">
+                  <div class="form-group">
+                    <label class="control-label">Data Source:</label>
+                    <div class="cubeSelectDiv">
+                      <select class="form-control cubeSelect"></select>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label">Rows:</label>
+                    <input
+                      type="text"
+                      class="form-control rowDims"
+                      autocomplete="off"
+                      value=""
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label">Columns:</label>
+                    <input
+                      type="text"
+                      class="form-control columnDims"
+                      autocomplete="off"
+                      value=""
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label">Values:</label>
+                    <input
+                      type="text"
+                      class="form-control measures"
+                      autocomplete="off"
+                      value=""
+                    />
+                  </div>
+                </div>
+              </div>
+            </tab>
+
+            <tab heading="Format" class="pt-3 px-2">
+              <div class="tab-pane" role="tabpanel" id="format">
+                <br />
+                <div class="form-horizontal">
+                  <div class="form-group">
+                    <label
+                      class="control-label col-sm-3"
+                      style="padding-right: 0px"
+                      >Value</label
+                    >
+                    <div class="col-sm-12">
+                      <select class="form-control valueModifier">
+                        <option value="">Number</option>
+                        <option value="PercentageGrandTotal">
+                          % of grand total
+                        </option>
+                        <option value="PercentageRowTotal">% of row</option>
+                        <option value="PercentageColumnTotal">
+                          % of column
+                        </option>
+                        <option value="DifferencePreviousRow">
+                          diff from prev row
+                        </option>
+                        <option value="DifferencePercentagePreviousRow">
+                          % diff from prev row
+                        </option>
+                        <option value="DifferencePreviousColumn">
+                          diff from prev column
+                        </option>
+                        <option value="DifferencePercentagePreviousColumn">
+                          % diff from prev column
+                        </option>
+                        <option value="RunningTotalRow">
+                          running total by row
+                        </option>
+                        <option value="RunningTotalColumn">
+                          running total by column
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label
+                      class="control-label col-sm-3"
+                      style="padding-right: 0px"
+                      >Heatmap</label
+                    >
+                    <div class="col-sm-12">
+                      <select class="form-control heatmap">
+                        <option value="">(none)</option>
+                        <option value="Table">By Table</option>
+                        <option value="Row">By Row</option>
+                        <option value="RowTotal">By Row Total</option>
+                        <option value="Column">By Column</option>
+                        <option value="ColumnTotal">By Column Total</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label
+                      class="control-label col-sm-3"
+                      style="padding-right: 0px"
+                      >Limits</label
+                    >
+                    <div class="col-sm-12">
+                      <select class="form-control limitRows">
+                        <option value="">(unlimited rows)</option>
+                        <option value="5">Top 5 rows</option>
+                        <option value="10">Top 10 rows</option>
+                        <option value="50">Top 50 rows</option>
+                        <option value="100">Top 100 rows</option>
+                        <option value="1000">Top 1000 rows</option>
+                      </select>
+                      <select
+                        class="form-control limitColumns"
+                        style="margin-top: 5px"
+                      >
+                        <option value="">(unlimited columns)</option>
+                        <option value="5">Top 5 columns</option>
+                        <option value="10">Top 10 columns</option>
+                        <option value="50">Top 50 columns</option>
+                        <option value="100">Top 100 columns</option>
+                        <option value="1000">Top 1000 columns</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="control-label">Labels grouping</label>
+                  <div class="checkbox">
+                    <label>
+                      <input
+                        type="checkbox"
+                        class="expandCollapse"
+                        autocomplete="off"
+                        value=""
+                      />
+                      Enable expand/collapse
+                      <span
+                        class="glyphicon glyphicon-question-sign text-muted"
+                        title="All groups are collapsed by default. In this mode limits and pagination are not applied."
+                      >
+                      </span>
+                    </label>
+                    <label>
+                      <input
+                        type="checkbox"
+                        class="preserveGroupOrder"
+                        autocomplete="off"
+                        value=""
+                      />
+                      Sort by value only inside group
+                    </label>
+                    <label>
+                      <input
+                        type="checkbox"
+                        class="subtotalRows"
+                        autocomplete="off"
+                        value=""
+                      />
+                      Subtotals for rows
+                    </label>
+                    <label>
+                      <input
+                        type="checkbox"
+                        class="subtotalColumns"
+                        autocomplete="off"
+                        value=""
+                      />
+                      Subtotals for columns
+                    </label>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="control-label">Totals</label>
+                  <div class="checkbox">
+                    <label>
+                      <input
+                        type="checkbox"
+                        class="totalsRow"
+                        autocomplete="off"
+                        value=""
+                        checked="checked"
+                      />
+                      Totals Row
+                    </label>
+                    <select
+                      name="totalsRowPosition"
+                      class="totalsRowPosition form-control"
+                    >
+                      <option value="Last">last row</option>
+                      <option value="First">first row</option>
+                    </select>
+                    <br />
+                    <label>
+                      <input
+                        type="checkbox"
+                        class="totalsColumn"
+                        autocomplete="off"
+                        value=""
+                        checked="checked"
+                      />
+                      Totals Column
+                    </label>
+                    <select
+                      name="totalsColumnPosition"
+                      class="totalsColumnPosition form-control"
+                    >
+                      <option value="Last">last column</option>
+                      <option value="First">first column</option>
+                    </select>
+                    <br />
+                    <label>
+                      <input
+                        type="checkbox"
+                        class="grandTotal"
+                        autocomplete="off"
+                        value=""
+                        checked="checked"
+                      />
+                      Grand Total
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </tab>
+            <div class="render-pivot-table-btn">
+              <a
+                href="javascript:;"
+                id="renderPivotTable"
+                class="btn btn-primary"
+                (click)="applyPivotChange()"
+                >APPLY</a
+              >
+            </div>
+          </tabset>
+        </div>
+
+        <!-- pivot table -->
+        <div class="col-lg-9 col-md-8">
+          <div
+            class="navbar-form navbar-left filter-form"
+            style="padding-left: 0px"
+          >
+            <div class="form-group inner-addon right-addon">
+              <button type="submit">
+                <i class="fa fa-search" aria-hidden="true"></i>
+              </button>
+              <input
+                type="text"
+                class="form-control input-sm filter"
+                placeholder="Filter By Rows or Columns"
+                title="Enter comma-separated list of keywords to filter. Use '-' prefix to exclude."
+              />
+            </div>
+            <a
+              href="javascript:;"
+              class="btn btn-sm btn-default drillUpBtn"
+              rel="excel"
+              >Back (Drill Up)
+              <span
+                class="badge drillUpCount"
+                style="background-color: silver; padding: 1px 4px"
+              ></span
+            ></a>
+          </div>
+
+          <!-- "pivotTable" class is used for chart placeholder (optional) -->
+          <div class="pivotTable" style="display: none; margin-top: 20px">
+            <div
+              class="progress"
+              style="
+                width: 50%;
+                margin-left: auto;
+                margin-right: auto;
+                margin-top: 20px;
+                margin-bottom: 20px;
+              "
+            >
+              <div
+                class="progress-bar progress-bar-striped active"
+                role="progressbar"
+                aria-valuenow="100"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                style="width: 100%"
+              >
+                <span class="sr-only">loading...</span>
+              </div>
+            </div>
+          </div>
+          <br />
+          <abp-modal-footer
+            (onCancelClick)="bsModalRef.hide()"
+          ></abp-modal-footer>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
